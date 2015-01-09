@@ -1,0 +1,26 @@
+html, body, #map-canvas {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+div#map-canvas {
+    width: 90%;
+    float: left;
+}
+
+#controls {
+    width: 10%;
+    height: 100%;
+    float: right;
+}
+
+button {
+    width: 100%;
+    height: 20%;
+}
+
+button img {
+    width: 90%;
+    height: 90%;
+}
