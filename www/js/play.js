@@ -381,6 +381,7 @@ function toggleView()
         $("#map-canvas").removeClass('minimap');
         $("#map-canvas").addClass('bigmap');     
     }
+    map.setCenter(playerMarker.getPosition());
 }
 
 ///////////
