@@ -53,7 +53,8 @@ function initialize() {
         zoom: 16,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         disableDefaultUI: true,
-        streetView : panorama
+        draggable: false,
+        streetView : panorama,
     };
     
     map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
@@ -268,7 +269,6 @@ function Zombie(pos){
        if(dist<5){
            var pct = 1-((dist-dieRadius)/(5-dieRadius));
            var expPct = 1.001*-Math.pow(3,-3 * pct)+1;
-            console.log("pct="+pct+" expPct="+expPct);
            var newHeight = (curSprite.height*smallMult) + ((curSprite.height-(curSprite.height*smallMult))*expPct);
            var newWidth = (curSprite.width*smallMult) + ((curSprite.width-(curSprite.width*smallMult))*expPct);
            var newImage = new google.maps.MarkerImage(curSprite.file,
@@ -285,10 +285,12 @@ function Zombie(pos){
                     
                 }
        }
+       
        if(dist<dieRadius){
            stopMove();
             gameOver(getPos());
         }
+        
         // Uno zombie è dentro la visuale
         if(dist<=zombieVisibleRadius){
             zombiesInVisibleRadius++;
@@ -319,13 +321,13 @@ function Zombie(pos){
         svSprite.setVisible(false);
     }
 
-    function move(){
+    function move() {
         var newZombPos;
-        if(route.length>0){
-            if(getPos()==route[0]){
+        if (route.length>0) {
+            if (getPos()==route[0]) {
                 route.shift();
             }
-            if(route[0]){
+            if (route[0]) {
                 var nextX = route[0].lat();
                 var nextY = route[0].lng();
                 var zombieX = getPos().lat();
@@ -341,7 +343,7 @@ function Zombie(pos){
                     newZombPos = new google.maps.LatLng(newX,newY);
                 }
                setPos(newZombPos);
-                 }
+            }
         }
         else
         {
@@ -350,6 +352,14 @@ function Zombie(pos){
     }
     function getKillStatus(){
         return gotKill;
+    }
+    
+    // 
+    function die() {
+        zombiesInVisibleRadius--;
+        if (zombiesInVisibleRadius == 0) {
+            toggleView();
+        }
     }
 
     return{
