@@ -97,22 +97,6 @@ function initialize() {
         // Browser doesn't support Geolocation
         alert('Il tuo browser non supporta la geolocalizzazione!');
     }
-
-    /*google.maps.event.addListener(panorama, "visible_changed", function() {
-        if (panorama.getVisible() && $("#pano-canvas").is(':visible')){
-            //moving the pegman around the map
-        }else if(panorama.getVisible() && $("#pano-canvas").is(':hidden')){
-            alert("test");
-            $("#pano-canvas").show();          
-            $("#map-canvas").removeClass('bigmap');
-            $("#map-canvas").addClass('minimap');
-        }
-        google.maps.event.addListener(panorama, "closeclick", function() {
-            $("#pano-canvas").hide();  
-            $("#map-canvas").removeClass('minimap');
-            $("#map-canvas").addClass('bigmap');        
-        });
-    }); */
 }
 
 function positionUpdated(){
@@ -310,6 +294,7 @@ function Zombie(pos){
             zombiesInVisibleRadius++;
             panorama.setVisible(true);
             svSprite.setVisible(true);
+            toggleView();
             playerMarker.circle.setOptions({
                 strokeColor: 'red',
                 fillColor: 'red'
@@ -375,6 +360,17 @@ function Zombie(pos){
         getKillStatus:getKillStatus
     };
 
+}
+
+function toggleView()
+{
+    if ($("#map-canvas").hasClass('bigmap')) {
+        $("#map-canvas").removeClass('bigmap');
+        $("#map-canvas").addClass('minimap');
+    } else {
+        $("#map-canvas").removeClass('minimap');
+        $("#map-canvas").addClass('bigmap');     
+    }
 }
 
 ///////////
