@@ -13,6 +13,7 @@ var zombieDistributionRange = 3800;
 var zombieAwareRadius = 500;
 var zombieAsleepRadius = 700;
 var zombieVisibleRadius = 200;
+var zombiesInVisibleRadius = 0;
 var dieRadius = 1;
 
 var app = {
@@ -43,7 +44,7 @@ function initialize() {
     
     var panoramaOptions = {
         visible: false,
-        enableCloseButton : true
+        disableDefaultUI: true,
     };
     
     panorama = new google.maps.StreetViewPanorama(document.getElementById('pano-canvas'), panoramaOptions);
@@ -51,7 +52,7 @@ function initialize() {
     var mapOptions = {
         zoom: 16,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
-        //disableDefaultUI: true,
+        disableDefaultUI: true,
         streetView : panorama
     };
     
@@ -74,7 +75,7 @@ function initialize() {
                 playerMarker.circle = new google.maps.Circle({
                     map: map,
                     center: playerMarker.getPosition(),
-                    radius: 250,    // 10 miles in metres
+                    radius: zombieVisibleRadius,
                 });
                 
                 playerMarker.circle.bindTo('center', playerMarker, 'position');
@@ -83,6 +84,7 @@ function initialize() {
                 startGame(pos);
             }
             playerMarker.setPosition(pos);
+            panorama.setPosition(pos);
             positionUpdated();
         }, function() {
             alert("Nessuna posizione rilevata.");
@@ -303,8 +305,15 @@ function Zombie(pos){
            stopMove();
             gameOver(getPos());
         }
+        // Uno zombie è dentro la visuale
         if(dist<=zombieVisibleRadius){
+            zombiesInVisibleRadius++;
+            panorama.setVisible(true);
             svSprite.setVisible(true);
+            playerMarker.circle.setOptions({
+                strokeColor: 'red',
+                fillColor: 'red'
+            });
         }
     }
     function getPos (){
@@ -405,6 +414,57 @@ function startGame(loc){
     map.setStreetView(sv);
     google.maps.event.addListener(sv,'position_changed',svPosChange);*/
     createZombies();
+}
+
+function gameOver(zombPos){
+    var i;
+    for(i in zombies){
+        if(!zombies[i].getKillStatus()){
+            zombies[i].stopMove();
+        }
+    }
+    clearInterval(timeInt);
+    var heading = google.maps.geometry.spherical.computeHeading(sv.getPosition(),zombPos);
+    var curHeading = sv.getPov().heading;
+    if(heading - curHeading<0){
+        aniAmt*=-1;
+    }
+    aniPov(heading);
+    document.getElementById('blood').style.display='block';
+}
+
+function aniPov(dest){
+    aniFinish = dest;
+    povAniInt = setInterval(aniPovStep,33);
+}
+
+function aniPovStep(){
+    var curPov = sv.getPov();
+    var newHeading = curPov.heading + aniAmt;
+    if(newHeading>=aniFinish-Math.abs(aniAmt) && newHeading<=aniFinish+Math.abs(aniAmt)){
+        clearInterval(povAniInt);
+        newHeading = aniFinish;
+        console.log('ani done');
+        setTimeout(showEnd,2000);
+    }
+    sv.setPov({
+        heading:newHeading,
+        zoom:curPov.zoom,
+        pitch:0
+    });
+}
+
+function showEnd(){
+    var min = Math.floor(timeSpent/60).toString();
+    var sec = Math.round(timeSpent%60).toString();
+    if(min.length<2){
+        min = "0"+min;
+    }
+    if(sec.length<2){
+        sec = "0"+sec;
+    }
+    document.getElementById('gametime').innerHTML = min+" minutes and "+sec+" seconds";
+    document.getElementById('gameover').style.display='block';
 }
 
 $( initialize );
