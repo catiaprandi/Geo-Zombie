@@ -24,8 +24,8 @@ div#pano-canvas, div#map-canvas {
 }
 
 .minimap{
-  width:480px;
-  height:320px;
+  width:30%;
+  height:40%;
 } 
 
 #controls {
@@ -42,4 +42,12 @@ button {
 button img {
     width: 90%;
     height: 90%;
+}
+
+#blood{
+    background-color:#b30808;
+    position:absolute;
+    z-index:400;
+    display:none;
+    opacity:.5;
 }

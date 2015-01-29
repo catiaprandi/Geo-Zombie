@@ -15,6 +15,9 @@ var zombieAsleepRadius = 700;
 var zombieVisibleRadius = 200;
 var zombiesInVisibleRadius = 0;
 var dieRadius = 1;
+var aniFinish;
+var aniAmt = 10;
+var povAniInt;
 
 var app = {
     // Application Constructor
@@ -80,6 +83,7 @@ function initialize() {
                 });
                 
                 playerMarker.circle.bindTo('center', playerMarker, 'position');
+                map.bindTo('center', playerMarker, 'position');
 
                 map.setCenter(pos);
                 startGame(pos);
@@ -226,7 +230,7 @@ function Zombie(pos){
         map:map,
         title:"zombie"
     });
-    var svSprite = new google.maps.Marker({
+    var panoramaSprite = new google.maps.Marker({
         position:pos,
         map:panorama,
         title:"zombie",
@@ -234,27 +238,26 @@ function Zombie(pos){
         icon:image,
         clickable:false
     });
-   
-   
+
+
+    // Get directions to player
     function getDir(){
          var dirReq = {
             origin:mapSprite.getPosition(),
             destination: playerMarker.getPosition(),
             travelMode: google.maps.DirectionsTravelMode.WALKING
         };
-        dirService.route(dirReq,gotDir);
-    }
-
-    function gotDir(result,status){
-        if(status == google.maps.DirectionsStatus.OK){
-            route = result.routes[0].overview_path;
-            if(imNew){
-                setPos(route.shift());
-                imNew=false;
-            }else{
-                route[0]=getPos();
+        dirService.route(dirReq,function(result,status){
+            if(status == google.maps.DirectionsStatus.OK){
+                route = result.routes[0].overview_path;
+                if(imNew){
+                    setPos(route.shift());
+                    imNew=false;
+                }else{
+                    route[0]=getPos();
+                }
             }
-        }
+        });
     }
 
     function redirect(){
@@ -263,7 +266,7 @@ function Zombie(pos){
     
     function setPos (pos){
        mapSprite.setPosition(pos);
-       svSprite.setPosition(pos);
+       panoramaSprite.setPosition(pos);
        var dist = google.maps.geometry.spherical.computeDistanceBetween(getPos(),playerMarker.getPosition());
        
        if(dist<5){
@@ -277,7 +280,7 @@ function Zombie(pos){
                 new google.maps.Point(newWidth/2, newHeight * curSprite.anchorMult ),
                 new google.maps.Size(newWidth,newHeight)
             );
-                svSprite.setIcon(newImage);
+                panoramaSprite.setIcon(newImage);
 
                 if(!gotKill){
                     gotKill=true;
@@ -293,14 +296,16 @@ function Zombie(pos){
         
         // Uno zombie è dentro la visuale
         if(dist<=zombieVisibleRadius){
+            if (zombiesInVisibleRadius == 0) {
+                panorama.setVisible(true);
+                playerMarker.circle.setOptions({
+                    strokeColor: 'red',
+                    fillColor: 'red'
+                });
+                toggleView();
+            }
             zombiesInVisibleRadius++;
-            panorama.setVisible(true);
-            svSprite.setVisible(true);
-            toggleView();
-            playerMarker.circle.setOptions({
-                strokeColor: 'red',
-                fillColor: 'red'
-            });
+            panoramaSprite.setVisible(true);
         }
     }
     function getPos (){
@@ -318,7 +323,7 @@ function Zombie(pos){
             clearInterval(moveInt);
             moveInt = null;
         }
-        svSprite.setVisible(false);
+        panoramaSprite.setVisible(false);
     }
 
     function move() {
@@ -359,6 +364,7 @@ function Zombie(pos){
         zombiesInVisibleRadius--;
         if (zombiesInVisibleRadius == 0) {
             toggleView();
+            panorama.setVisible(false);
         }
     }
 
@@ -374,6 +380,7 @@ function Zombie(pos){
 
 function toggleView()
 {
+    var currCenter = map.getCenter();
     if ($("#map-canvas").hasClass('bigmap')) {
         $("#map-canvas").removeClass('bigmap');
         $("#map-canvas").addClass('minimap');
@@ -381,7 +388,8 @@ function toggleView()
         $("#map-canvas").removeClass('minimap');
         $("#map-canvas").addClass('bigmap');     
     }
-    map.setCenter(playerMarker.getPosition());
+    google.maps.event.trigger(map, 'resize');
+    map.setCenter(currCenter);
 }
 
 ///////////
@@ -431,8 +439,8 @@ function gameOver(zombPos){
         }
     }
     clearInterval(timeInt);
-    var heading = google.maps.geometry.spherical.computeHeading(sv.getPosition(),zombPos);
-    var curHeading = sv.getPov().heading;
+    var heading = google.maps.geometry.spherical.computeHeading(panorama.getPosition(),zombPos);
+    var curHeading = panorama.getPov().heading;
     if(heading - curHeading<0){
         aniAmt*=-1;
     }
@@ -446,15 +454,15 @@ function aniPov(dest){
 }
 
 function aniPovStep(){
-    var curPov = sv.getPov();
+    var curPov = panorama.getPov();
     var newHeading = curPov.heading + aniAmt;
     if(newHeading>=aniFinish-Math.abs(aniAmt) && newHeading<=aniFinish+Math.abs(aniAmt)){
         clearInterval(povAniInt);
         newHeading = aniFinish;
-        console.log('ani done');
+        //console.log('ani done');
         setTimeout(showEnd,2000);
     }
-    sv.setPov({
+    panorama.setPov({
         heading:newHeading,
         zoom:curPov.zoom,
         pitch:0
@@ -470,8 +478,8 @@ function showEnd(){
     if(sec.length<2){
         sec = "0"+sec;
     }
-    document.getElementById('gametime').innerHTML = min+" minutes and "+sec+" seconds";
-    document.getElementById('gameover').style.display='block';
+    //document.getElementById('gametime').innerHTML = min+" minutes and "+sec+" seconds";
+    //document.getElementById('gameover').style.display='block';
 }
 
 $( initialize );
