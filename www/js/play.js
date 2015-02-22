@@ -143,6 +143,7 @@ function createZombies(){
         heading = Math.random()*360;
         dist = playerBuffer + (Math.random()*(zombieDistributionRange-playerBuffer));
         newZombie = new Zombie(google.maps.geometry.spherical.computeOffset(center,dist,heading));
+
         zombies.push(newZombie);
     }
 }
@@ -180,7 +181,8 @@ function Zombie(pos){
     var bigSizeH = 373;
     var imgW = 139;
     var imgH = 373;
-    var gotKill = false;
+
+    var health = 100; // Zombie's health
 
     var smallMult = 0.05;
     var anchorMult = 0.4;
@@ -212,38 +214,40 @@ function Zombie(pos){
     var curSprite = zombieSprites[Math.round(Math.random()*(zombieSprites.length-1))];
 
     var image = new google.maps.MarkerImage(curSprite.file,
-        new google.maps.Size(curSprite.width,curSprite.height),
-        new google.maps.Point(0,0),
-        new google.maps.Point((curSprite.width*smallMult)/2,curSprite.height*smallMult),
-        new google.maps.Size(curSprite.width*smallMult,curSprite.height*smallMult)
-    );
+            new google.maps.Size(curSprite.width,curSprite.height),
+            new google.maps.Point(0,0),
+            new google.maps.Point((curSprite.width*smallMult)/2,curSprite.height*smallMult),
+            new google.maps.Size(curSprite.width*smallMult,curSprite.height*smallMult)
+        );
+    var mapMarker = new google.maps.Marker({
+            map:map,
+            title:"zombie"
+        });
+    var panoramaMarker = new google.maps.Marker({
+            map:panorama,
+            title:"zombie",
+            visible:false,
+            icon:image,
+            clickable:false
+        });
+    
+    
+    // 
+    init(pos);
+    
+    function init(pos) {
 
-    var closeImage = new google.maps.MarkerImage(curSprite.file,
-        new google.maps.Size(curSprite.width,curSprite.height),
-        new google.maps.Point(0,0),
-        new google.maps.Point(curSprite.width/2,curSprite.height*anchorMult),
-        new google.maps.Size(curSprite.width,curSprite.height)
-    );
-
-    var mapSprite = new google.maps.Marker({
-        position:pos,
-        map:map,
-        title:"zombie"
-    });
-    var panoramaSprite = new google.maps.Marker({
-        position:pos,
-        map:panorama,
-        title:"zombie",
-        visible:false,
-        icon:image,
-        clickable:false
-    });
+        mapMarker.setPosition(pos);
+        panoramaMarker.setPosition(pos);
+        
+        setVisible(true);
+    }
 
 
     // Get directions to player
     function getDir(){
          var dirReq = {
-            origin:mapSprite.getPosition(),
+            origin:mapMarker.getPosition(),
             destination: playerMarker.getPosition(),
             travelMode: google.maps.DirectionsTravelMode.WALKING
         };
@@ -265,8 +269,8 @@ function Zombie(pos){
     }
     
     function setPos (pos){
-       mapSprite.setPosition(pos);
-       panoramaSprite.setPosition(pos);
+       mapMarker.setPosition(pos);
+       panoramaMarker.setPosition(pos);
        var dist = google.maps.geometry.spherical.computeDistanceBetween(getPos(),playerMarker.getPosition());
        
        if(dist<5){
@@ -280,10 +284,10 @@ function Zombie(pos){
                 new google.maps.Point(newWidth/2, newHeight * curSprite.anchorMult ),
                 new google.maps.Size(newWidth,newHeight)
             );
-                panoramaSprite.setIcon(newImage);
+                panoramaMarker.setIcon(newImage);
 
-                if(!gotKill){
-                    gotKill=true;
+                if(!isDead()){
+                    health = 0;
                     gameOver(getPos());
                     
                 }
@@ -305,11 +309,11 @@ function Zombie(pos){
                 toggleView();
             }
             zombiesInVisibleRadius++;
-            panoramaSprite.setVisible(true);
+            panoramaMarker.setVisible(true);
         }
     }
     function getPos (){
-        return mapSprite.getPosition();
+        return mapMarker.getPosition();
     }
 
     function startMove(){
@@ -323,7 +327,7 @@ function Zombie(pos){
             clearInterval(moveInt);
             moveInt = null;
         }
-        panoramaSprite.setVisible(false);
+        panoramaMarker.setVisible(false);
     }
 
     function move() {
@@ -355,25 +359,40 @@ function Zombie(pos){
             clearInterval(moveInt);
         }
     }
-    function getKillStatus(){
-        return gotKill;
-    }
     
     // 
-    function die() {
-        zombiesInVisibleRadius--;
-        if (zombiesInVisibleRadius == 0) {
-            toggleView();
-            panorama.setVisible(false);
+    function setVisible(flag) {
+        mapMarker.setVisible(flag);
+        panoramaMarker.setVisible(!flag);
+    }
+    
+    function hit() {
+        health = health - 25;
+        if (isDead()) {
+            zombiesInVisibleRadius--;
+            setVisible(false);
+            
+            if (zombiesInVisibleRadius == 0) {
+                toggleView();
+                panorama.setVisible(false);
+            }
+        }
+    }
+    
+    function isDead() {
+        if (health <= 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 
-    return{
+    return {
         getPos:getPos,
         startMove:startMove,
         stopMove:stopMove,
         redirect:redirect,
-        getKillStatus:getKillStatus
+        isDead:isDead
     };
 
 }
@@ -398,43 +417,15 @@ function startGame(loc){
     startLoc = loc;
     updateTimer();
 
-            totalZombies = 70;
-
-    /*var mapOps = {
-        zoom:15,
-        mapTypeId:google.maps.MapTypeId.ROADMAP,
-        disableDefaultUI: false,
-        center:startLoc,
-        minZoom:13,
-        streetViewControl:false,
-        draggable:false,
-        mapTypeControl:false
-        
-    };
-    dirService = new google.maps.DirectionsService();
-    dirDisplay = new google.maps.DirectionsRenderer();
-    //mapDiv.style.display = "block";
-    //svDiv.style.display = "block";
-    //document.getElementById('startup').style.display='none';
-    //document.getElementById('play').style.display='block';
-    map = new google.maps.Map(mapDiv,mapOps);
-    var svOpts = {
-        position : startLoc,
-        zoomControl:false,
-        scrollwheel:false,
-        disableDoubleClickZoom:true
-
-    };
-    sv = new google.maps.StreetViewPanorama(svDiv,svOpts);
-    map.setStreetView(sv);
-    google.maps.event.addListener(sv,'position_changed',svPosChange);*/
+    totalZombies = 70;
+            
     createZombies();
 }
 
 function gameOver(zombPos){
     var i;
     for(i in zombies){
-        if(!zombies[i].getKillStatus()){
+        if(!zombies[i].isDead()){
             zombies[i].stopMove();
         }
     }
