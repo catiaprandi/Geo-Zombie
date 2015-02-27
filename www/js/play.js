@@ -18,6 +18,7 @@ var dieRadius = 1;
 var aniFinish;
 var aniAmt = 10;
 var povAniInt;
+var playerData;
 
 var app = {
     // Application Constructor
@@ -70,11 +71,18 @@ function initialize() {
 
             if (playerMarker === null)
             {
+                var playerIcon = new google.maps.MarkerImage(
+                    'img/marker/player.png',
+                    null, /* size is determined at runtime */
+                    null, /* origin is 0,0 */
+                    null, /* anchor is bottom center of the scaled image */
+                    new google.maps.Size(42, 68)
+                );  
                 // Place player's marker
                 playerMarker = new google.maps.Marker({
                   position: pos,
                   map: map,
-                  icon: 'img/marker/player.png',
+                  icon: playerIcon,
                 });
                 
                 playerMarker.circle = new google.maps.Circle({
@@ -88,10 +96,16 @@ function initialize() {
 
                 map.setCenter(pos);
                 startGame(pos);
+                
+                playerData = JSON.parse(localStorage['data']);
+                // set interval
+                var tid = setInterval(savePlayerData, 15000);
             }
             playerMarker.setPosition(pos);
             panorama.setPosition(pos);
             positionUpdated();
+
+
         }, function() {
             alert("Nessuna posizione rilevata.");
         }, {
@@ -103,6 +117,17 @@ function initialize() {
         // Browser doesn't support Geolocation
         alert('Il tuo browser non supporta la geolocalizzazione!');
     }
+}
+
+function savePlayerData() {
+    $.ajax({
+        url: 'http://robotex.altervista.org/tesi/index.php',
+        type: 'POST',
+        data: playerData
+    }).done(function( data ) {
+        if (data == 'Not authenticated') { // Refresh authentication
+        }
+    });
 }
 
 function positionUpdated(){

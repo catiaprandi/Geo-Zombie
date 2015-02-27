@@ -25,7 +25,7 @@ function report(pos, type) {
     */
     $.ajax({
         url: 'http://robotex.altervista.org/tesi/report.php',
-        data: { type: type, lat: pos.lat(), lng: pos.lng() },
+        data: { type: type, lat: pos.lat(), lng: pos.lng(), session_id: localStorage['session_id'] },
         jsonp: 'callback',
         dataType: 'jsonp',
     }).done(function( data ) {

@@ -9,8 +9,8 @@ $(document).ready(function() {
             data: { username : user }
         }).done(function( data ) {
             user = data['username'];
-            localStorage['username'] = user;
-            localStorage['data'] = data;
+            localStorage['data'] = JSON.stringify(data);
+            localStorage['session_id'] = data['session_id'];
             alert('Benvenuto ' + user + '!');
             window.location = 'play.html';
         });
