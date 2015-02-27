@@ -247,7 +247,8 @@ function Zombie(pos){
         );
     var mapMarker = new google.maps.Marker({
             map:map,
-            title:"zombie"
+            title:"zombie",
+            icon:'img/marker/zombie.png'
         });
     var panoramaMarker = new google.maps.Marker({
             map:panorama,
