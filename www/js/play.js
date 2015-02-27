@@ -19,6 +19,7 @@ var aniFinish;
 var aniAmt = 10;
 var povAniInt;
 var playerData;
+var isPaused = false;
 
 var app = {
     // Application Constructor
@@ -360,6 +361,8 @@ function Zombie(pos){
     function move() {
         var newZombPos;
         if (route.length>0) {
+            if (isPaused)
+                return;
             if (getPos()==route[0]) {
                 route.shift();
             }

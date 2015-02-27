@@ -35,6 +35,7 @@ function report(pos, type) {
 
 function toggle_visibility(id) {
    var e = document.getElementById(id);
+   isPaused = !isPaused;
    if(e.style.display == 'block')
       e.style.display = 'none';
    else
