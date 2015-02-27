@@ -24,8 +24,12 @@ function report(pos, type) {
     localStorage['reports'] = JSON.stringify(reports);
     */
     $.ajax({
-        url: 'http://robotex.altervista.org/tesi/index.php',
-        data: { type: type, lat: pos.lat(), lng: pos.lng() }
+        url: 'http://robotex.altervista.org/tesi/report.php',
+        data: { type: type, lat: pos.lat(), lng: pos.lng() },
+        jsonp: 'callback',
+        dataType: 'jsonp',
+    }).done(function( data ) {
+        alert('Punti bonus: ' + data['bonus_points']);
     });
 }
 

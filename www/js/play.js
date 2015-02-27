@@ -12,7 +12,7 @@ var zombieMoveDist = 0.00001;
 var zombieDistributionRange = 3800;
 var zombieAwareRadius = 500;
 var zombieAsleepRadius = 700;
-var zombieVisibleRadius = 200;
+var zombieVisibleRadius = 150;
 var zombiesInVisibleRadius = 0;
 var dieRadius = 1;
 var aniFinish;
@@ -43,6 +43,7 @@ var app = {
 
 function initialize() {
     
+    // Initialize Google Maps and Street View
     dirService = new google.maps.DirectionsService();
     
     var panoramaOptions = {
@@ -173,18 +174,18 @@ function Zombie(pos){
     var route;
     var moveInt;
     var imNew = true;
-    var smallAnchorY = 37.3;
-    var bigAnchorY = 210;
-    var smallSizeW = 13.9;
-    var smallSizeH = 37.3;
-    var bigSizeW = 139;
-    var bigSizeH = 373;
+    //var smallAnchorY = 37.3;
+    //var bigAnchorY = 210;
+    //var smallSizeW = 13.9;
+    //var smallSizeH = 37.3;
+    //var bigSizeW = 139;
+    //var bigSizeH = 373;
     var imgW = 139;
     var imgH = 373;
 
     var health = 100; // Zombie's health
 
-    var smallMult = 0.05;
+    var smallMult = 0.5; //0.05;
     var anchorMult = 0.4;
 
     var zombieSprites = [
