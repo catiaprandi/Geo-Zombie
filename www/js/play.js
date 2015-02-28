@@ -100,6 +100,8 @@ function initialize() {
                 startGame(pos);
                 
                 playerData = JSON.parse(localStorage['data']);
+                
+                updateWeaponImage();
                 // set interval
                 var tid = setInterval(savePlayerData, 15000);
             }
@@ -119,6 +121,8 @@ function initialize() {
         // Browser doesn't support Geolocation
         alert('Il tuo browser non supporta la geolocalizzazione!');
     }
+    
+    $('#show-player-stats').click(function() {showPlayerStats();});
 }
 
 function resetPlayerData() {
@@ -534,6 +538,23 @@ function showEnd(){
     }
     //document.getElementById('gametime').innerHTML = min+" minutes and "+sec+" seconds";
     //document.getElementById('gameover').style.display='block';
+}
+
+function showPlayerStats() {
+    isPaused = true;
+    alert('Player: ' + playerData['username'] + '\nPoints: ' + playerData['points'] + '\nPower: ' + playerData['power']);
+    isPaused = false;
+}
+
+function updateWeaponImage() {
+    var img;
+    if (playerData['power'] == 25)
+        img = 'img/button/Beretta_93R.png';
+    else if (playerData['power'] == 50)
+        img = 'img/button/ACW_Rifle.png';
+    else if (playerData['power'] == 100)
+        img = 'img/button/sv_121_by_dalttt-d6mn5w3.png';
+    $('#gun-image').attr('src', img);
 }
 
 $( initialize );
