@@ -618,7 +618,7 @@ function updateHealthImage() {
     else if (playerData['health'] == 25)
         img = 'img/button/heart_25.png';
     else if (playerData['health'] == 50)
-        img = 'img/button/health_50.png';
+        img = 'img/button/heart_50.png';
     else if (playerData['health'] == 75)
         img = 'img/button/heart_75.png';
     else if (playerData['health'] == 100)
