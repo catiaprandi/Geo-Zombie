@@ -102,6 +102,7 @@ function initialize() {
                 playerData = JSON.parse(localStorage['data']);
                 
                 updateWeaponImage();
+                updateHealthImage();
                 // set interval
                 var tid = setInterval(savePlayerData, 15000);
             }
@@ -127,7 +128,8 @@ function initialize() {
 
 function resetPlayerData() {
     playerData['points'] = 0;
-    playerData['power'] = 0;
+    playerData['power'] = 25;
+    playerData['health'] = 100;
 }
 
 function savePlayerData() {
@@ -314,7 +316,7 @@ function Zombie(pos){
        mapMarker.setPosition(pos);
        panoramaMarker.setPosition(pos);
        var dist = google.maps.geometry.spherical.computeDistanceBetween(getPos(),playerMarker.getPosition());
-       
+       /*
        if(dist<5){
            var pct = 1-((dist-dieRadius)/(5-dieRadius));
            var expPct = 1.001*-Math.pow(3,-3 * pct)+1;
@@ -333,11 +335,16 @@ function Zombie(pos){
                     gameOver(getPos());
                     
                 }
-       }
+       }*/
        
        if(dist<dieRadius){
-           stopMove();
-            gameOver(getPos());
+            respawn();
+            playerData['health'] = playerData['health'] - 25;
+            updateHealthImage();
+            if (playerData['health'] <= 0) {
+                stopMove();
+                gameOver(getPos());
+            }
         }
         
         // Uno zombie è dentro la visuale
@@ -414,15 +421,17 @@ function Zombie(pos){
         return (google.maps.geometry.spherical.computeDistanceBetween(mapMarker.getPosition(), playerMarker.getPosition()) <= zombieVisibleRadius);
     }
     
+    function respawn() {
+        var center = playerMarker.getPosition();
+        var heading = Math.random()*360;
+        var dist = playerBuffer + (Math.random()*(zombieDistributionRange-playerBuffer));
+        init(google.maps.geometry.spherical.computeOffset(center,dist,heading));
+    }
+    
     function hit() {
         health = health - playerData['power'];
         if (isDead()) {
-            zombiesInVisibleRadius--;
-            
-            var center = playerMarker.getPosition();
-            var heading = Math.random()*360;
-            var dist = playerBuffer + (Math.random()*(zombieDistributionRange-playerBuffer));
-            init(google.maps.geometry.spherical.computeOffset(center,dist,heading));
+            respawn();
             
             zombiesInVisibleRadius = zombies.some(function(element, index, array) {
                 return element.isInPlayerVisibleRadius();
@@ -504,6 +513,7 @@ function gameOver(zombPos){
     document.getElementById('blood').style.display='block';
     resetPlayerData();
     savePlayerData();
+    alert('Sei morto!');
 }
 
 function aniPov(dest){
@@ -555,6 +565,21 @@ function updateWeaponImage() {
     else if (playerData['power'] == 100)
         img = 'img/button/sv_121_by_dalttt-d6mn5w3.png';
     $('#gun-image').attr('src', img);
+}
+
+function updateHealthImage() {
+    var img;
+    if (playerData['health'] == 0)
+        img = 'img/button/heart_0.png';
+    else if (playerData['health'] == 25)
+        img = 'img/button/heart_25.png';
+    else if (playerData['health'] == 50)
+        img = 'img/button/health_50.png';
+    else if (playerData['health'] == 75)
+        img = 'img/button/heart_75.png';
+    else if (playerData['health'] == 100)
+        img = 'img/button/heart_100.png';
+    $('#health-image').attr('src', img);
 }
 
 $( initialize );
