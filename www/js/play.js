@@ -256,7 +256,7 @@ function Zombie(pos){
             title:"zombie",
             visible:false,
             icon:image,
-            clickable:false
+            clickable:true
         });
     
     
@@ -267,6 +267,10 @@ function Zombie(pos){
 
         mapMarker.setPosition(pos);
         panoramaMarker.setPosition(pos);
+        
+        google.maps.event.addListener(panoramaMarker, 'click', function() {
+            hit();
+        });
         
         setVisible(true);
     }
@@ -393,14 +397,18 @@ function Zombie(pos){
     // 
     function setVisible(flag) {
         mapMarker.setVisible(flag);
-        panoramaMarker.setVisible(!flag);
+        panoramaMarker.setVisible(flag && isPanoramaView ? flag : !flag);
     }
     
     function hit() {
-        health = health - 25;
+        health = health - playerData['power'];
         if (isDead()) {
             zombiesInVisibleRadius--;
-            setVisible(false);
+            
+            var center = playerMarker.getPosition();
+            var heading = Math.random()*360;
+            var dist = playerBuffer + (Math.random()*(zombieDistributionRange-playerBuffer));
+            init(google.maps.geometry.spherical.computeOffset(center,dist,heading));
             
             if (zombiesInVisibleRadius == 0) {
                 toggleView();
@@ -425,6 +433,10 @@ function Zombie(pos){
         isDead:isDead
     };
 
+}
+
+function isPanoramaView() {
+    return !$("#map-canvas").hasClass('bigmap');
 }
 
 function toggleView()

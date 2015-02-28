@@ -29,7 +29,8 @@ function report(pos, type) {
         jsonp: 'callback',
         dataType: 'jsonp',
     }).done(function( data ) {
-        alert('Punti bonus: ' + data['bonus_points']);
+        playerData['points'] = playerData['points'] + data['bonus_points'];
+        alert('Punti bonus: ' + data['bonus_points'] + '\nAttuali: ' + playerData['points']);
     });
 }
 
