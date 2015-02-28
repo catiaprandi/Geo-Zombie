@@ -596,7 +596,7 @@ function showEnd(){
 
 function showPlayerStats() {
     isPaused = true;
-    alert('Player: ' + playerData['username'] + '\nPoints: ' + playerData['points'] + '\nPower: ' + playerData['power']);
+    alert('Giocatore: ' + playerData['username'] + '\nPunti: ' + playerData['points'] + '\nForza: ' + playerData['power']);
     isPaused = false;
 }
 
