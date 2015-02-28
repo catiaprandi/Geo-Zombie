@@ -13,7 +13,7 @@ var zombieDistributionRange = 3800;
 var zombieAwareRadius = 500;
 var zombieAsleepRadius = 700;
 var zombieVisibleRadius = 150;
-var zombiesInVisibleRadius = 0;
+var zombiesInVisibleRadius = false;
 var dieRadius = 1;
 var aniFinish;
 var aniAmt = 10;
@@ -60,6 +60,7 @@ function initialize() {
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         disableDefaultUI: true,
         draggable: false,
+        disableDoubleClickZoom: true,
         streetView : panorama,
     };
     
@@ -120,14 +121,19 @@ function initialize() {
     }
 }
 
+function resetPlayerData() {
+    playerData['points'] = 0;
+    playerData['power'] = 0;
+}
+
 function savePlayerData() {
     $.ajax({
         url: 'http://robotex.altervista.org/tesi/index.php',
         type: 'POST',
         data: playerData
     }).done(function( data ) {
-        if (data == 'Not authenticated') { // Refresh authentication
-        }
+        //if (data == 'Not authenticated') { // Refresh authentication
+        //}
     });
 }
 
@@ -332,7 +338,7 @@ function Zombie(pos){
         
         // Uno zombie è dentro la visuale
         if(dist<=zombieVisibleRadius){
-            if (zombiesInVisibleRadius == 0) {
+            if (zombiesInVisibleRadius == false) {
                 panorama.setVisible(true);
                 playerMarker.circle.setOptions({
                     strokeColor: 'red',
@@ -340,7 +346,7 @@ function Zombie(pos){
                 });
                 toggleView();
             }
-            zombiesInVisibleRadius++;
+            zombiesInVisibleRadius = true;
             panoramaMarker.setVisible(true);
         }
     }
@@ -400,6 +406,10 @@ function Zombie(pos){
         panoramaMarker.setVisible(flag && isPanoramaView ? flag : !flag);
     }
     
+    function isInPlayerVisibleRadius() {
+        return (google.maps.geometry.spherical.computeDistanceBetween(mapMarker.getPosition(), playerMarker.getPosition()) <= zombieVisibleRadius);
+    }
+    
     function hit() {
         health = health - playerData['power'];
         if (isDead()) {
@@ -410,7 +420,15 @@ function Zombie(pos){
             var dist = playerBuffer + (Math.random()*(zombieDistributionRange-playerBuffer));
             init(google.maps.geometry.spherical.computeOffset(center,dist,heading));
             
-            if (zombiesInVisibleRadius == 0) {
+            zombiesInVisibleRadius = zombies.some(function(element, index, array) {
+                return element.isInPlayerVisibleRadius();
+            });
+            
+            if (zombiesInVisibleRadius == false) {
+                playerMarker.circle.setOptions({
+                    strokeColor: 'black',
+                    fillColor: 'black'
+                });
                 toggleView();
                 panorama.setVisible(false);
             }
@@ -430,7 +448,8 @@ function Zombie(pos){
         startMove:startMove,
         stopMove:stopMove,
         redirect:redirect,
-        isDead:isDead
+        isDead:isDead,
+        isInPlayerVisibleRadius:isInPlayerVisibleRadius
     };
 
 }
@@ -477,8 +496,10 @@ function gameOver(zombPos){
     if(heading - curHeading<0){
         aniAmt*=-1;
     }
-    aniPov(heading);
+    //aniPov(heading);
     document.getElementById('blood').style.display='block';
+    resetPlayerData();
+    savePlayerData();
 }
 
 function aniPov(dest){
