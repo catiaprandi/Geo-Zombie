@@ -14,7 +14,7 @@ var zombieAwareRadius = 500;
 var zombieAsleepRadius = 700;
 var zombieVisibleRadius = 150;
 var zombiesInVisibleRadius = false;
-var dieRadius = 1;
+var dieRadius = 5;
 var aniFinish;
 var aniAmt = 10;
 var povAniInt;
