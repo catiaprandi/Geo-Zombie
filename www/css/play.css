@@ -26,6 +26,14 @@ div#pano-canvas, div#map-canvas {
     z-index: 450;
 }
 
+#upgradeform {
+    top: 0;
+    left: 0;
+    position: absolute;
+    display:none;
+    z-index: 450;
+}
+
 .bigmap{
   width:90%;
   height:100%;

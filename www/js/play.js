@@ -20,6 +20,8 @@ var aniAmt = 10;
 var povAniInt;
 var playerData;
 var isPaused = false;
+var healthPrice = 5;
+var powerPrice = 5;
 
 var app = {
     // Application Constructor
@@ -124,6 +126,48 @@ function initialize() {
     }
     
     $('#show-player-stats').click(function() {showPlayerStats();});
+    $('#btnUpgradeForm').click(function() {
+        toggle_visibility('upgradeform');
+    });
+    
+    $('#btnBuyHealth').click(function() {
+        if (playerData['health'] < 100 && playerData['points'] >= healthPrice ) {
+            playerData['points'] -= healthPrice;
+            playerData['health'] += 25;
+            updateHealthImage();
+        } else if (playerData['points'] < healthPrice) {
+            alert('Non hai abbastanza punti!');
+        } else {
+            alert('Sei già al massimo di vita!');
+        }
+    });
+    $('#btnBuyPower').click(function() {
+        if (playerData['points'] < powerPrice) {
+            alert('Non hai abbastanza punti!');
+            return;
+        }
+        
+        if (playerData['power'] == 25) {
+            playerData['points'] -= powerPrice;
+            playerData['power'] = 50;
+            updateWeaponImage();
+        } else if (playerData['power'] == 50) {
+            playerData['points'] -= powerPrice;
+            playerData['power'] = 100;
+            updateWeaponImage();
+        } else {
+            alert('Sei già al massimo di potenza!');
+        }
+    });
+}
+
+function toggle_visibility(id) {
+   var e = document.getElementById(id);
+   isPaused = !isPaused;
+   if(e.style.display == 'block')
+      e.style.display = 'none';
+   else
+      e.style.display = 'block';
 }
 
 function resetPlayerData() {
