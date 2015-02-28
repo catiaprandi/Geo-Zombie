@@ -272,21 +272,21 @@ function Zombie(pos){
 
     var zombieSprites = [
         {
-            file:'img/zombie/zombie1.png',
+            file:'img/zombie/zombie4.png',
             width:244,
             height:708,
             speed: 1,
             anchorMult:0.3
         },
         {
-            file:'img/zombie/zombie2.png',
+            file:'img/zombie/zombie5.png',
             width:437,
             height:664,
             speed: 1,
             anchorMult:0.4
         },
         {
-            file:'img/zombie/zombie3.png',
+            file:'img/zombie/zombie6.png',
             width:413,
             height:420,
             speed: 1,
