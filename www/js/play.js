@@ -559,7 +559,12 @@ function gameOver(zombPos){
     document.getElementById('blood').style.display='block';
     resetPlayerData();
     savePlayerData();
-    alert('Sei morto!');
+    if (confirm('Sei morto! Vuoi ricominciare?')) {
+        document.getElementById('blood').style.display='none';
+        updateWeaponImage();
+        updateHealthImage();
+        startGame(playerMarker.getPosition());
+    }
 }
 
 function aniPov(dest){
