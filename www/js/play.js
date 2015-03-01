@@ -75,12 +75,14 @@ function initialize() {
 
             if (playerMarker === null)
             {
+                playerData = JSON.parse(localStorage['data']);
+                
                 var playerIcon = new google.maps.MarkerImage(
-                    'img/marker/player.png',
+                    playerData['sex'] == 'f' ? 'img/marker/player_female.png' : 'img/marker/player.png',
                     null, /* size is determined at runtime */
                     null, /* origin is 0,0 */
                     null, /* anchor is bottom center of the scaled image */
-                    new google.maps.Size(42, 68)
+                    new google.maps.Size(62, 68)
                 );  
                 // Place player's marker
                 playerMarker = new google.maps.Marker({
@@ -100,8 +102,6 @@ function initialize() {
 
                 map.setCenter(pos);
                 startGame(pos);
-                
-                playerData = JSON.parse(localStorage['data']);
                 
                 updateWeaponImage();
                 updateHealthImage();
