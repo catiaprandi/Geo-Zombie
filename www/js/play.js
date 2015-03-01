@@ -473,6 +473,8 @@ function Zombie(pos){
     }
     
     function hit() {
+        var audio = new Audio('fx/GUN_FIRE-GoodSoundForYou-820112263.mp3');
+        audio.play();
         health = health - playerData['power'];
         if (isDead()) {
             respawn();
