@@ -20,8 +20,8 @@ var aniAmt = 10;
 var povAniInt;
 var playerData;
 var isPaused = false;
-var healthPrice = 5;
-var powerPrice = 5;
+var healthPrice = 25;
+var powerPrice = 50;
 
 var app = {
     // Application Constructor
