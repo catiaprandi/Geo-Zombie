@@ -152,4 +152,5 @@ input[type=password]:hover,
 label:hover ~ input[type=text],
 label:hover ~ input[type=password] {
  	background:#27292c;
+        color: #ffffff;
 }
