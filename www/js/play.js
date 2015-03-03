@@ -52,6 +52,7 @@ function initialize() {
     
     var panoramaOptions = {
         visible: false,
+        disableDoubleClickZoom:true,
         disableDefaultUI: true,
     };
     
@@ -105,6 +106,7 @@ function initialize() {
                 
                 updateWeaponImage();
                 updateHealthImage();
+                $('#status-image').attr('src', playerData['sex'] == 'f' ? 'img/marker/player_female.png' : 'img/marker/player.png');
                 // set interval
                 var tid = setInterval(savePlayerData, 15000);
             }

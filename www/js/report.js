@@ -5,7 +5,7 @@ function initialize() {
     });
     
     $('#btnReport').click(function() {
-        report(playerMarker.getPosition(), 'Passaggio pedonale');
+        report(playerMarker.getPosition(), $('#facility').val());
     });
 }
 

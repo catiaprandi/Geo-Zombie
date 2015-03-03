@@ -26,6 +26,12 @@ div#pano-canvas, div#map-canvas {
     z-index: 450;
 }
 
+#reportform input {
+    width: 99.4%;
+    min-height: 50px;
+    text-align: center;
+}
+
 #upgradeform {
     top: 0;
     left: 0;
