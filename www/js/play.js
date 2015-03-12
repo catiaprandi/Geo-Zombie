@@ -9,7 +9,7 @@ var timeInt;
 var FPS = 5;
 var fpsInt = 1000/FPS;
 var zombieMoveDist = 0.00001;
-var zombieDistributionRange = 3800;
+var zombieDistributionRange = 1900;
 var zombieAwareRadius = 500;
 var zombieAsleepRadius = 700;
 var zombieVisibleRadius = 150;
@@ -539,7 +539,7 @@ function startGame(loc){
     startLoc = loc;
     updateTimer();
 
-    totalZombies = 70;
+    totalZombies = 35;
             
     createZombies();
 }
