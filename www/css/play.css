@@ -1,75 +1,19 @@
-html, body, #map {
+html, body{
     height: 100%;
     margin: 0px;
     padding: 0px;
-}
-
-div#map {
-    float: left;
-}
-
-div#pano-canvas, div#map-canvas {
-    top: 0;
-    left: 0;
-    position: absolute;
-}
-
-#map-canvas {
-    z-index: 10;
-}
-
-#reportform {
-    top: 0;
-    left: 0;
-    position: absolute;
-    display:none;
-    z-index: 450;
-}
-
-#reportform input {
-    width: 99.4%;
-    min-height: 50px;
-    text-align: center;
-}
-
-#upgradeform {
-    top: 0;
-    left: 0;
-    position: absolute;
-    display:none;
-    z-index: 450;
-}
-
-.bigmap{
-  width:90%;
-  height:100%;
-}
-
-.minimap{
-  width:30%;
-  height:40%;
-} 
-
-#controls {
-    width: 10%;
-    height: 100%;
-    float: right;
-}
-
-button {
     width: 100%;
-    height: 20%;
 }
 
-button img {
-    width: 90%;
-    height: 90%;
+#map-container{
+    height: 100%;
+    width: 100%;
 }
 
-#blood{
-    background-color:#b30808;
-    position:absolute;
-    z-index:400;
-    display:none;
-    opacity:.5;
+#map-canvas{
+    height: 10%;
+}
+
+#panorama-canvas{
+    height: 100%;
 }
