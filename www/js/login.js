@@ -8,7 +8,7 @@ $(document).ready(function() {
         }
         var sex = $('input[name=sex]:checked', '#login-form').val();
         $.ajax({
-            url: 'http://134.204.74.226/Geo-Zombie/index.php',
+            url: 'http://137.204.74.226/Geo-Zombie/index.php',
             jsonp: 'callback',
             dataType: 'jsonp',
             data: { username : user }

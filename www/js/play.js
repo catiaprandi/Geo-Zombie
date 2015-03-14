@@ -473,7 +473,7 @@ var game = {
     
     savePlayerDataAuto : function() {
         $.ajax({
-            url: 'http://134.204.74.226/Geo-Zombie/index.php',
+            url: 'http://137.204.74.226/Geo-Zombie/index.php',
             type: 'POST',
             data: playerData
         }).always(function() {
@@ -489,7 +489,7 @@ var game = {
 
     savePlayerData : function(repeat) {
         $.ajax({
-            url: 'http://134.204.74.226/Geo-Zombie/index.php',
+            url: 'http://137.204.74.226/Geo-Zombie/index.php',
             type: 'POST',
             data: playerData
         });
