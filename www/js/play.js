@@ -21,7 +21,7 @@ var povAniInt;
 var playerData;
 var isPaused = false;
 var healthPrice = 25;
-var powerPrice = 50;
+var powerPrice = 25;
 var positionTracked = false;
 var totalZombies = 15;
 var zombiesTargetPosition;
@@ -377,6 +377,8 @@ var game = {
         
     
         $('#show-player-stats').click(function() {showPlayerStats();});
+        $('#health-image').click(function() {showLifeStats();});
+
         $('#btnUpgradeForm').click(function() {
             toggle_visibility('upgradeform');
         });
@@ -401,10 +403,12 @@ var game = {
             if (playerData['power'] == 0) {
                 playerData['points'] -= powerPrice;
                 playerData['power'] = 25;
+                powerPrice = 50;
                 updateWeaponImage();
             } else if (playerData['power'] == 25) {
                 playerData['points'] -= powerPrice;
                 playerData['power'] = 50;
+                powerPrice = 100;
                 updateWeaponImage();
             } else if (playerData['power'] == 50) {
                 playerData['points'] -= powerPrice;
@@ -483,7 +487,7 @@ var game = {
     
     resetPlayerData : function() {
         playerData['points'] = 0;
-        playerData['power'] = 25;
+        playerData['power'] = 0;
         playerData['health'] = 100;
     },
 
@@ -518,6 +522,7 @@ function gameOver(zombPos){
         updateWeaponImage();
         updateHealthImage();
         game.start(playerMarker.getPosition());
+        //window.location.reload();
     }
 }
 
@@ -529,7 +534,18 @@ function showPlayerStats() {
     else
         stringa = ' ' + playerData['power'];
 
-    alert('Giocatore: ' + playerData['username'] + '\nPunti ottenuti facendo report: ' + playerData['points'] + 'Potenza dell\'arma:' + stringa);
+    alert('Giocatore: ' + playerData['username'] + '\nPunti ottenuti facendo report: ' + playerData['points'] + '\n'+ 'Potenza dell\'arma:' + stringa);
+    isPaused = false;
+}
+
+
+function showLifeStats() {
+   var stringa;
+   if(playerData['health'] != 100)
+        stringa = '\nSe fai altri report puoi comprarne altra!';
+   else
+        stringa = '';
+    alert('La tua vita è di: ' + playerData['health'] + stringa);
     isPaused = false;
 }
 
