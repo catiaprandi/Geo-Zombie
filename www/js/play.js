@@ -179,9 +179,7 @@ function Zombie(pos) {
     
     function nextMove() {
         var newZombPos;
-        if (route.length>0) {
-            if (isPaused)
-                return;
+        if (route.length>0 && !isPaused) {
             if (getPosition()==route[0]) {
                 route.shift();
             }
@@ -400,7 +398,11 @@ var game = {
                 return;
             }
             
-            if (playerData['power'] == 25) {
+            if (playerData['power'] == 0) {
+                playerData['points'] -= powerPrice;
+                playerData['power'] = 25;
+                updateWeaponImage();
+            } else if (playerData['power'] == 25) {
                 playerData['points'] -= powerPrice;
                 playerData['power'] = 50;
                 updateWeaponImage();
@@ -527,7 +529,9 @@ function showPlayerStats() {
 
 function updateWeaponImage() {
     var img;
-    if (playerData['power'] == 25)
+    if (playerData['power'] == 0)
+        img = 'img/button/no_weapon.png';
+    else if (playerData['power'] == 25)
         img = 'img/button/Beretta_93R.png';
     else if (playerData['power'] == 50)
         img = 'img/button/ACW_Rifle.png';

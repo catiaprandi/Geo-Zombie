@@ -30,7 +30,7 @@ function report(pos, type) {
         dataType: 'jsonp',
     }).done(function( data ) {
         playerData['points'] = playerData['points'] + data['bonus_points'];
-        savePlayerData();
+        game.savePlayerData();
         alert('Punti bonus: ' + data['bonus_points'] + '\nAttuali: ' + playerData['points']);
     });
 }
