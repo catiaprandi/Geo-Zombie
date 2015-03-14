@@ -134,7 +134,7 @@ function Zombie(pos) {
             updateHealthImage();
             if (playerData['health'] <= 0) {
                 stopMove();
-                //gameOver(getPosition());
+                gameOver(getPosition());
             } else {
                 spawn();
             }
@@ -377,7 +377,7 @@ var game = {
             alert('Il tuo browser non supporta la geolocalizzazione!');
         }
         
-    /*
+    
         $('#show-player-stats').click(function() {showPlayerStats();});
         $('#btnUpgradeForm').click(function() {
             toggle_visibility('upgradeform');
@@ -411,7 +411,11 @@ var game = {
             } else {
                 alert('Sei già al massimo di potenza!');
             }
-        });*/
+        });
+        
+        updateWeaponImage();
+        updateHealthImage();
+        $('#status-image').attr('src', playerData['sex'] == 'f' ? 'img/marker/player_female.png' : 'img/marker/player.png');
         
         //setInterval(mainLoop, 1000/FPS);
         lowLag.init();
@@ -427,8 +431,11 @@ var game = {
         var newZombie;
         var i;
         zombiesTargetPosition = playerMarker.getPosition();
-        for(i=1;i<=totalZombies;i++) {
-            newZombie = new Zombie();
+        for(i=0;i<totalZombies;i++) {
+            if (zombies.length < totalZombies)
+                newZombie = new Zombie();
+            else
+                newZombie = zombies[i+1];
             newZombie.spawn();
             newZombie.redirect();
             zombies.push(newZombie);
@@ -499,21 +506,16 @@ function gameOver(zombPos){
             zombies[i].stopMove();
         }
     }
-    clearInterval(timeInt);
-    var heading = google.maps.geometry.spherical.computeHeading(panorama.getPosition(),zombPos);
-    var curHeading = panorama.getPov().heading;
-    if(heading - curHeading<0){
-        aniAmt*=-1;
-    }
-    //aniPov(heading);
+
     document.getElementById('blood').style.display='block';
-    resetPlayerData();
-    savePlayerData();
+    game.resetPlayerData();
+    game.savePlayerData();
+    
     if (confirm('Sei morto! Vuoi ricominciare?')) {
         document.getElementById('blood').style.display='none';
         updateWeaponImage();
         updateHealthImage();
-        startGame(playerMarker.getPosition());
+        game.start(playerMarker.getPosition());
     }
 }
 

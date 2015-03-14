@@ -47,6 +47,28 @@ html, body {
     height: 90%;
 }
 
+#reportform {
+    top: 0;
+    left: 0;
+    position: absolute;
+    display:none;
+    z-index: 450;
+}
+
+#reportform input {
+    width: 99.4%;
+    min-height: 50px;
+    text-align: center;
+}
+
+#upgradeform {
+    top: 0;
+    left: 0;
+    position: absolute;
+    display:none;
+    z-index: 450;
+}
+
 #blood {
     background-color:#b30808;
     position:absolute;
