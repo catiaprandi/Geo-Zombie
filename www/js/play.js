@@ -6,7 +6,7 @@ var timeSpent = 0;
 var totalMoves = 0;
 var playerBuffer = 180;
 var timeInt;
-var FPS =  5;
+var FPS = 3;
 var fpsInt = 1000/FPS;
 var zombieMoveDist = 0.00001;
 var zombieDistributionRange = 1000;
