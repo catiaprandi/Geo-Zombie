@@ -377,7 +377,8 @@ var game = {
         
     
         $('#show-player-stats').click(function() {showPlayerStats();});
-        $('#health-image').click(function() {showLifeStats();});
+
+        $('#health-image').click(function() { alert("Prova"); showLifeStats();});
 
         $('#btnUpgradeForm').click(function() {
             toggle_visibility('upgradeform');
