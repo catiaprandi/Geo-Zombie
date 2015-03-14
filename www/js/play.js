@@ -6,7 +6,7 @@ var timeSpent = 0;
 var totalMoves = 0;
 var playerBuffer = 180;
 var timeInt;
-var FPS = 3;
+var FPS =  5;
 var fpsInt = 1000/FPS;
 var zombieMoveDist = 0.00001;
 var zombieDistributionRange = 1000;
@@ -82,6 +82,15 @@ function Zombie(pos) {
             anchorMult:0.6
         }
     ];
+    
+    var curSprite = zombieSprites[Math.round(Math.random()*(zombieSprites.length-1))];
+
+    var image = new google.maps.MarkerImage(curSprite.file,
+            new google.maps.Size(curSprite.width,curSprite.height),
+            new google.maps.Point(0,0),
+            new google.maps.Point((curSprite.width*smallMult)/2,curSprite.height*smallMult),
+            new google.maps.Size(curSprite.width*smallMult,curSprite.height*smallMult)
+        );
 
     var mapMarker = new google.maps.Marker({
         map: map,
@@ -90,7 +99,7 @@ function Zombie(pos) {
     var panoramaMarker = new google.maps.Marker({
         map: panorama,
         visible: false,
-        //icon: image,
+        icon: image,
         clickable: true
     });
     var health = 100;
@@ -226,9 +235,32 @@ function Zombie(pos) {
         return (google.maps.geometry.spherical.computeDistanceBetween(mapMarker.getPosition(), playerMarker.getPosition()) <= zombieVisibleRadius);
     }
     
+    
+    function hit() {
+        flash();
+        lowLag.play('fx/GUN_FIRE-GoodSoundForYou-820112263.mp3');
+        health = health - playerData['power'];
+        if (isDead()) {
+            spawn();
+            
+            zombiesInVisibleRadius = zombies.some(function(element, index, array) {
+                return element.isInPlayerVisibleRadius();
+            });
+            
+            if (zombiesInVisibleRadius == false) {
+                playerMarker.circle.setOptions({
+                    strokeColor: 'black',
+                    fillColor: 'black'
+                });
+                game.toggleView();
+                panorama.setVisible(false);
+            }
+        }
+    }
+    
     // Run once
     google.maps.event.addListener(panoramaMarker, 'click', function() {
-        //hit();
+        hit();
     });
     
     return {
@@ -382,6 +414,8 @@ var game = {
         });*/
         
         //setInterval(mainLoop, 1000/FPS);
+        lowLag.init();
+        lowLag.load("fx/GUN_FIRE-GoodSoundForYou-820112263.mp3");
     },
     
     start : function() {
@@ -411,7 +445,7 @@ var game = {
     positionUpdated : function() {
         if (google.maps.geometry.spherical.computeDistanceBetween(zombiesTargetPosition, playerMarker.getPosition()) > 10) {
             zombiesTargetPosition = playerMarker.getPosition();
-            recalculateZombiesDirections();
+            game.recalculateZombiesDirections();
         }
     },
     
@@ -438,6 +472,12 @@ var game = {
         });
     },
     
+    resetPlayerData : function() {
+        playerData['points'] = 0;
+        playerData['power'] = 25;
+        playerData['health'] = 100;
+    },
+
     savePlayerData : function(repeat) {
         $.ajax({
             url: 'http://robotex.altervista.org/tesi/index.php',
@@ -449,6 +489,69 @@ var game = {
     isPanoramaView : function () {
         return !$("#map-canvas").hasClass('bigmap');
     }
+}
+
+
+function gameOver(zombPos){
+    var i;
+    for(i in zombies){
+        if(!zombies[i].isDead()){
+            zombies[i].stopMove();
+        }
+    }
+    clearInterval(timeInt);
+    var heading = google.maps.geometry.spherical.computeHeading(panorama.getPosition(),zombPos);
+    var curHeading = panorama.getPov().heading;
+    if(heading - curHeading<0){
+        aniAmt*=-1;
+    }
+    //aniPov(heading);
+    document.getElementById('blood').style.display='block';
+    resetPlayerData();
+    savePlayerData();
+    if (confirm('Sei morto! Vuoi ricominciare?')) {
+        document.getElementById('blood').style.display='none';
+        updateWeaponImage();
+        updateHealthImage();
+        startGame(playerMarker.getPosition());
+    }
+}
+
+function showPlayerStats() {
+    isPaused = true;
+    alert('Giocatore: ' + playerData['username'] + '\nPunti: ' + playerData['points'] + '\nForza: ' + playerData['power']);
+    isPaused = false;
+}
+
+function updateWeaponImage() {
+    var img;
+    if (playerData['power'] == 25)
+        img = 'img/button/Beretta_93R.png';
+    else if (playerData['power'] == 50)
+        img = 'img/button/ACW_Rifle.png';
+    else if (playerData['power'] == 100)
+        img = 'img/button/sv_121_by_dalttt-d6mn5w3.png';
+    $('#gun-image').attr('src', img);
+}
+
+function updateHealthImage() {
+    var img;
+    if (playerData['health'] == 0)
+        img = 'img/button/heart_0.png';
+    else if (playerData['health'] == 25)
+        img = 'img/button/heart_25.png';
+    else if (playerData['health'] == 50)
+        img = 'img/button/heart_50.png';
+    else if (playerData['health'] == 75)
+        img = 'img/button/heart_75.png';
+    else if (playerData['health'] == 100)
+        img = 'img/button/heart_100.png';
+    $('#health-image').attr('src', img);
+}
+
+function flash() {
+    document.getElementById('flash-fx').style.display='block';
+    setTimeout(function() { document.getElementById('flash-fx').style.display='none'; }, 250);
 }
 
 $( game.init );

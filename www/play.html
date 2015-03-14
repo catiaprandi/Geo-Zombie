@@ -14,6 +14,7 @@
         <div id="map-container">
             <div id="map-canvas" class="bigmap"></div>
             <div id="panorama-canvas" class="bigmap"></div>
+            <div id="flash-fx" class="bigmap"></div>
         </div>
         <div id="controls">
                 <button class="control-button" id="show-player-stats"><img src="icon.png" width="30px" id="status-image"></button>
@@ -22,9 +23,11 @@
                 <button class="control-button" id="btnUpgradeForm"><img src="icon.png" width="30px"></button>
                 <button class="control-button" id="btnReportForm"><img src="img/button/Report.png" width="30px"></button>
         </div>
-        <div id="blood" class="bigmap"></div>
+        <div id="blood"></div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/lib/jquery-2.1.3.min.js"></script>
+        <script type="text/javascript" src="js/lib/lowLag.js"></script>
+        <script type="text/javascript" src="js/lib/soundmanager2-nodebug-jsmin.js"></script>
         <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyA9SMINFvkDhLF-MoP4YFzOn8q6YdyhIlU"></script>
         <script type="text/javascript" src="https://apis.google.com/js/client.js"></script>
         <script type="text/javascript" src="js/play.js"></script>
