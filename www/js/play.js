@@ -394,7 +394,7 @@ var game = {
         });
         $('#btnBuyPower').click(function() {
             if (playerData['points'] < powerPrice) {
-                alert('Non hai abbastanza punti!');
+                alert('Non hai abbastanza punti!\nContinua a fare report!');
                 return;
             }
             
@@ -523,7 +523,13 @@ function gameOver(zombPos){
 
 function showPlayerStats() {
     isPaused = true;
-    alert('Giocatore: ' + playerData['username'] + '\nPunti: ' + playerData['points'] + '\nForza: ' + playerData['power']);
+    var stringa:
+    if (playerData['power'] == 0)
+        stringa = ' non hai nessuna arma!';
+    else
+        stringa = ' ' + playerData['power'];
+
+    alert('Giocatore: ' + playerData['username'] + '\nPunti ottenuti facendo report: ' + playerData['points'] + 'Potenza dell\'arma:' + stringa);
     isPaused = false;
 }
 
