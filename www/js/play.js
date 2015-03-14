@@ -378,7 +378,7 @@ var game = {
     
         $('#show-player-stats').click(function() {showPlayerStats();});
 
-        $('#health-image').click(function() { alert("Prova"); showLifeStats();});
+        $('#show-health-stats').click(function() { alert("Prova"); showLifeStats();});
 
         $('#btnUpgradeForm').click(function() {
             toggle_visibility('upgradeform');
@@ -390,7 +390,7 @@ var game = {
                 playerData['health'] += 25;
                 updateHealthImage();
             } else if (playerData['points'] < healthPrice) {
-                alert('Non hai abbastanza punti!');
+                alert('Non hai abbastanza punti!\nContinua a fare report!');
             } else {
                 alert('Sei già al massimo di vita!');
             }
