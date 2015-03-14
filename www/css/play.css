@@ -12,12 +12,23 @@ html, body {
 }
 
 #map-canvas {
-    height: 10%;
+    position: absolute;
+    z-index: 2;
 }
 
 #panorama-canvas {
-    height: 100%;
+    position: absolute;
+    z-index: 1;
 }
+
+.bigmap{
+    width:100%;
+    height:100%;
+}
+.minimap{
+    width:30%;
+    height:40%;
+} 
 
 #controls {
     position: fixed;
@@ -34,4 +45,12 @@ html, body {
 .control-button img {
     width: 90%;
     height: 90%;
+}
+
+#blood {
+    background-color:#b30808;
+    position:absolute;
+    z-index:400;
+    display:none;
+    opacity:.5;
 }
