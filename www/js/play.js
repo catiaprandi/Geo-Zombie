@@ -523,7 +523,7 @@ function gameOver(zombPos){
 
 function showPlayerStats() {
     isPaused = true;
-    var stringa:
+    var stringa;
     if (playerData['power'] == 0)
         stringa = ' non hai nessuna arma!';
     else
