@@ -24,6 +24,7 @@ var healthPrice = 25;
 var powerPrice = 50;
 var positionTracked = false;
 var totalZombies = 15;
+var zombiesTargetPosition;
 
 var app = {
     // Application Constructor
@@ -172,21 +173,10 @@ function Zombie(pos) {
     function redirect() {
         getDirections();
     }
-
-    function startMove() {
-        if(route && !moveInt){
-            moveInt = setInterval(move,1000/FPS);
-        }
-       
-    }
-    function stopMove() {
-        if(moveInt){
-            clearInterval(moveInt);
-            moveInt = null;
-        }
-    }
     
     function move() {
+        if (!route)
+            return;
         var newZombPos;
         if (route.length>0) {
             if (isPaused)
@@ -229,8 +219,9 @@ function Zombie(pos) {
     
     return {
         getPosition:getPosition,
-        startMove:startMove,
-        stopMove:stopMove,
+        //startMove:startMove,
+        //stopMove:stopMove,
+        move:move,
         redirect:redirect,
         isDead:isDead,
         isInPlayerVisibleRadius:isInPlayerVisibleRadius,
@@ -238,22 +229,30 @@ function Zombie(pos) {
     };
 }
 
-function mainLoop() {
+function checkZombies() {
     var zom;
     var dist;
-    redirects = 0;
     var i;
     for(i in zombies){
         zom = zombies[i];
         dist = google.maps.geometry.spherical.computeDistanceBetween(zom.getPosition(),playerMarker.getPosition());
         if(dist<zombieAwareRadius){
-            redirects++;
-            if(redirects<80){
-                zom.redirect();
-            }
-            zom.startMove();
+            zom.redirect();
+        }
+    }
+}
+
+function mainLoop() {
+    var zom;
+    var dist;
+    var i;
+    for(i in zombies){
+        zom = zombies[i];
+        dist = google.maps.geometry.spherical.computeDistanceBetween(zom.getPosition(),playerMarker.getPosition());
+        if(dist<zombieAwareRadius){
+            zom.move();
         }else if(dist>zombieAsleepRadius){
-            zom.stopMove();
+            //zom.stopMove();
         }
     }
 }
@@ -314,10 +313,13 @@ var game = {
                 playerMarker.setPosition(pos);
                 panorama.setPosition(pos);
                 map.setCenter(pos);
-                
+            
                 if (!positionTracked) {
                     positionTracked = true;
                     game.start();
+                    checkZombies();
+                } else {
+                    game.positionUpdated();
                 }
 
             }, function(error) {
@@ -345,10 +347,18 @@ var game = {
     createZombies : function() {
         var newZombie;
         var i;
+        zombiesTargetPosition = playerMarker.getPosition();
         for(i=1;i<=totalZombies;i++) {
             newZombie = new Zombie();
             newZombie.spawn();
             zombies.push(newZombie);
+        }
+    },
+    
+    positionUpdated : function() {
+        if (google.maps.geometry.spherical.computeDistanceBetween(zombiesTargetPosition, playerMarker.getPosition()) > 10) {
+            zombiesTargetPosition = playerMarker.getPosition();
+            checkZombies();
         }
     },
     
