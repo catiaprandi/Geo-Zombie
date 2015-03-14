@@ -24,7 +24,7 @@ function report(pos, type) {
     localStorage['reports'] = JSON.stringify(reports);
     */
     $.ajax({
-        url: 'http://robotex.altervista.org/tesi/report.php',
+        url: 'http://134.204.74.226/Geo-Zombie/report.php',
         data: { type: type, lat: pos.lat(), lng: pos.lng(), session_id: localStorage['session_id'] },
         jsonp: 'callback',
         dataType: 'jsonp',
