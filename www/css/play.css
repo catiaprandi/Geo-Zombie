@@ -1,19 +1,37 @@
-html, body{
+html, body {
     height: 100%;
     margin: 0px;
     padding: 0px;
     width: 100%;
 }
 
-#map-container{
+#map-container {
+    position: fixed;
     height: 100%;
-    width: 100%;
+    width: calc(100% - 20vmin);
 }
 
-#map-canvas{
+#map-canvas {
     height: 10%;
 }
 
-#panorama-canvas{
+#panorama-canvas {
     height: 100%;
+}
+
+#controls {
+    position: fixed;
+    right: 0;
+    height: 100%;
+    width: 20vmin;
+}
+
+.control-button {
+    width: 100%;
+    height: 20vmin;
+}
+
+.control-button img {
+    width: 90%;
+    height: 90%;
 }
