@@ -6,7 +6,7 @@ var timeSpent = 0;
 var totalMoves = 0;
 var playerBuffer = 180;
 var timeInt;
-var FPS = 5;
+var FPS = 3;
 var fpsInt = 1000/FPS;
 var zombieMoveDist = 0.00001;
 var zombieDistributionRange = 1000;
@@ -25,6 +25,7 @@ var powerPrice = 50;
 var positionTracked = false;
 var totalZombies = 15;
 var zombiesTargetPosition;
+var autosaveTimer;
 
 var app = {
     // Application Constructor
@@ -52,8 +53,7 @@ function Zombie(pos) {
     var health; // Zombie's health
 
     var route;
-    var moveInt;
-    var imNew = true;
+    var moveTimer;
     var imgW = 139;
     var imgH = 373;
     var smallMult = 0.5; //0.05;
@@ -105,7 +105,6 @@ function Zombie(pos) {
     }
     
     function spawn() {
-        imNew = true;
         health = 100;
         var center = playerMarker.getPosition();
         var heading = Math.random()*360;
@@ -160,12 +159,7 @@ function Zombie(pos) {
         dirService.route(dirReq,function(result,status) {
             if (status == google.maps.DirectionsStatus.OK) {
                 route = result.routes[0].overview_path;
-                if (imNew) {
-                    setPosition(route.shift());
-                    imNew=false;
-                } else {
-                    route[0]=getPosition();
-                }
+                checkPosition();
             }
         });
     }
@@ -174,9 +168,7 @@ function Zombie(pos) {
         getDirections();
     }
     
-    function move() {
-        if (!route)
-            return;
+    function nextMove() {
         var newZombPos;
         if (route.length>0) {
             if (isPaused)
@@ -201,11 +193,33 @@ function Zombie(pos) {
                 }
                setPosition(newZombPos);
             }
+            
         }
-        else
-        {
-            clearInterval(moveInt);
+        moveTimer = setTimeout(nextMove, 1000/FPS);
+    }
+    
+    function startMove() {
+        if(route && !moveTimer){
+            //moveInt = setInterval(move,1000/FPS);
+            moveTimer = setTimeout(nextMove, 1000/FPS);
         }
+       
+    }
+    
+    function stopMove(){
+        if(moveTimer){
+            clearTimeout(moveTimer);
+            moveTimer = null;
+        }
+    }
+    
+    function checkPosition() {
+        dist = google.maps.geometry.spherical.computeDistanceBetween(getPosition(),playerMarker.getPosition());
+	    if(dist<zombieAwareRadius){
+		startMove();
+	    }else if(dist>zombieAsleepRadius){
+		stopMove();
+	    }
     }
     
     function isInPlayerVisibleRadius() {
@@ -219,13 +233,14 @@ function Zombie(pos) {
     
     return {
         getPosition:getPosition,
-        //startMove:startMove,
-        //stopMove:stopMove,
-        move:move,
+        startMove:startMove,
+        stopMove:stopMove,
+        nextMove:nextMove,
         redirect:redirect,
         isDead:isDead,
         isInPlayerVisibleRadius:isInPlayerVisibleRadius,
         spawn:spawn,
+        moveTimer:moveTimer,
     };
 }
 
@@ -234,27 +249,21 @@ function checkZombies() {
     var dist;
     var i;
     for(i in zombies){
-        zom = zombies[i];
-        dist = google.maps.geometry.spherical.computeDistanceBetween(zom.getPosition(),playerMarker.getPosition());
-        if(dist<zombieAwareRadius){
-            zom.redirect();
-        }
+        zombies[i].checkPosition();
     }
 }
-
+    
 function mainLoop() {
-    var zom;
-    var dist;
-    var i;
-    for(i in zombies){
-        zom = zombies[i];
-        dist = google.maps.geometry.spherical.computeDistanceBetween(zom.getPosition(),playerMarker.getPosition());
-        if(dist<zombieAwareRadius){
-            zom.move();
-        }else if(dist>zombieAsleepRadius){
-            //zom.stopMove();
-        }
-    }
+    checkZombies();
+}
+
+function toggle_visibility(id) {
+   var e = document.getElementById(id);
+   isPaused = !isPaused;
+   if(e.style.display == 'block')
+      e.style.display = 'none';
+   else
+      e.style.display = 'block';
 }
 
 var game = {
@@ -317,7 +326,6 @@ var game = {
                 if (!positionTracked) {
                     positionTracked = true;
                     game.start();
-                    checkZombies();
                 } else {
                     game.positionUpdated();
                 }
@@ -337,11 +345,48 @@ var game = {
             alert('Il tuo browser non supporta la geolocalizzazione!');
         }
         
-        setInterval(mainLoop, 1000/FPS);
+    /*
+        $('#show-player-stats').click(function() {showPlayerStats();});
+        $('#btnUpgradeForm').click(function() {
+            toggle_visibility('upgradeform');
+        });
+        
+        $('#btnBuyHealth').click(function() {
+            if (playerData['health'] < 100 && playerData['points'] >= healthPrice ) {
+                playerData['points'] -= healthPrice;
+                playerData['health'] += 25;
+                updateHealthImage();
+            } else if (playerData['points'] < healthPrice) {
+                alert('Non hai abbastanza punti!');
+            } else {
+                alert('Sei già al massimo di vita!');
+            }
+        });
+        $('#btnBuyPower').click(function() {
+            if (playerData['points'] < powerPrice) {
+                alert('Non hai abbastanza punti!');
+                return;
+            }
+            
+            if (playerData['power'] == 25) {
+                playerData['points'] -= powerPrice;
+                playerData['power'] = 50;
+                updateWeaponImage();
+            } else if (playerData['power'] == 50) {
+                playerData['points'] -= powerPrice;
+                playerData['power'] = 100;
+                updateWeaponImage();
+            } else {
+                alert('Sei già al massimo di potenza!');
+            }
+        });*/
+        
+        //setInterval(mainLoop, 1000/FPS);
     },
     
     start : function() {
         game.createZombies();
+        game.savePlayerDataAuto();
     },
     
     createZombies : function() {
@@ -351,14 +396,22 @@ var game = {
         for(i=1;i<=totalZombies;i++) {
             newZombie = new Zombie();
             newZombie.spawn();
+            newZombie.redirect();
             zombies.push(newZombie);
+        }
+    },
+    
+    recalculateZombiesDirections : function() {
+        var i;
+        for (i in zombies) {
+            zombies[i].redirect();
         }
     },
     
     positionUpdated : function() {
         if (google.maps.geometry.spherical.computeDistanceBetween(zombiesTargetPosition, playerMarker.getPosition()) > 10) {
             zombiesTargetPosition = playerMarker.getPosition();
-            checkZombies();
+            recalculateZombiesDirections();
         }
     },
     
@@ -375,7 +428,17 @@ var game = {
         map.setCenter(currCenter);
     },
     
-    savePlayerData : function() {
+    savePlayerDataAuto : function() {
+        $.ajax({
+            url: 'http://robotex.altervista.org/tesi/index.php',
+            type: 'POST',
+            data: playerData
+        }).always(function() {
+            autosaveTimer = setTimeout(game.savePlayerDataAuto, 15000);
+        });
+    },
+    
+    savePlayerData : function(repeat) {
         $.ajax({
             url: 'http://robotex.altervista.org/tesi/index.php',
             type: 'POST',
