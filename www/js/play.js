@@ -695,13 +695,13 @@ function showGunStats() {
         munizioni = '';
     } else {
        if(playerData['power'] == 25)
-            arma = 'Arma: pistola';
+            arma = 'Arma: PISTOLA';
        else if (playerData['power'] == 50)
-            arma = 'Arma: Fucile';
+            arma = 'Arma: FUCILE';
        else
-            arma = 'Arma: mitra';
+            arma = 'Arma: MITRA';
 
-
+        arma = arma + '\nPotenza dell\'arma: ' + playerData['power'];
 
        if(playerData['munition'] > 0)
             munizioni = 'Munizioni: ' +playerData['munition'] ;
