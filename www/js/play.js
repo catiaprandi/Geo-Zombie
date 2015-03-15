@@ -480,6 +480,20 @@ var game = {
                 alert('Sei già al massimo di vita!');
             }
         });
+
+
+        $('#btnBuyMunition').click(function() {
+            if (playerData['points'] >= 15) {
+                playerData['points'] -= 15;
+                playerData['munition'] += 4;
+                //updateHealthImage();
+
+            } else {
+                alert('Non hai abbastanza punti!\nDevi fare altri report!');
+            }
+         });
+
+
         $('#btnBuyPower').click(function() {
             powerPrice = playerData['power'] + 25;
             if (playerData['points'] < powerPrice) {
@@ -541,10 +555,14 @@ var game = {
     },
     
     recalculateZombiesDirections : function() {
-        var i;
-        for (i in zombies) {
-            zombies[i].redirect();
-        }
+        (function myLoop (i) {
+        if (google.maps.geometry.spherical.computeDistanceBetween(zombies[i-1].getPosition(),playerMarker.getPosition())<=zombieAwareRadius) {
+        setTimeout(function () {
+        zombies[i-1].redirect(); // your code here
+        if (--i) myLoop(i); // decrement i and call myLoop again if i > 0
+        }, 200);
+        } else if (--i) myLoop(i);
+        })(zombies.length); 
     },
     
     positionUpdated : function() {
@@ -581,6 +599,7 @@ var game = {
         playerData['points'] = 0;
         playerData['power'] = 0;
         playerData['health'] = 100;
+        playerData['munition'] = 0;
     },
 
     savePlayerData : function(repeat) {
@@ -626,7 +645,7 @@ function showPlayerStats() {
     else
         stringa = ' ' + playerData['power'];
 
-    alert('Giocatore: ' + playerData['username'] + '\nPunti ottenuti facendo report: ' + playerData['points'] + '\n'+ 'Potenza dell\'arma:' + stringa);
+    alert('Giocatore: ' + playerData['username'] + '\nPunti ottenuti facendo report: ' + playerData['points'] + '\n'+ 'Potenza dell\'arma:' + stringa +'\nMunizioni: ' + playerData['munition']);
     isPaused = false;
 }
 
