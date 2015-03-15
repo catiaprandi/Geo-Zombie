@@ -309,25 +309,33 @@ function Zombie(pos) {
     
     
     function hit() {
+        if(playerData['power'] > 0) {
+
         flash();
-        lowLag.play('fx/GUN_FIRE-GoodSoundForYou-820112263.mp3');
-        health = health - playerData['power'];
-        if (isDead()) {
-            spawn();
-            
-            zombiesInVisibleRadius = zombies.some(function(element, index, array) {
-                return element.isInPlayerVisibleRadius();
-            });
-            
-            if (zombiesInVisibleRadius == false) {
-                playerMarker.circle.setOptions({
-                    strokeColor: 'black',
-                    fillColor: 'black'
+            lowLag.play('fx/GUN_FIRE-GoodSoundForYou-820112263.mp3');
+            health = health - playerData['power'];
+            if (isDead()) {
+                spawn();
+
+                zombiesInVisibleRadius = zombies.some(function(element, index, array) {
+                    return element.isInPlayerVisibleRadius();
                 });
-                game.toggleView();
-                panorama.setVisible(false);
+
+                if (zombiesInVisibleRadius == false) {
+                    playerMarker.circle.setOptions({
+                        strokeColor: 'black',
+                        fillColor: 'black'
+                    });
+                    game.toggleView();
+                    panorama.setVisible(false);
+                }
             }
+        } else {
+
+            alert("Non hai armi!! Non puoi sparare!!");
+
         }
+
     }
     
     // Run once
