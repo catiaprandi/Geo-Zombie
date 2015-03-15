@@ -101,49 +101,49 @@ function Zombie(pos) {
             height:420,
             speed: 1,
             anchorMult:0.6
-        },
+        }, {
         file:'img/zombie/zombie7.png',
                 width:413,
                 height:420,
                 speed: 1,
                 anchorMult:0.6
-         },
+         }, {
           file:'img/zombie/zombie8.png',
                          width:413,
                          height:420,
                          speed: 1,
                          anchorMult:0.6
-        },
+        }, {
          file:'img/zombie/zombie9.png',
                         width:413,
                         height:420,
                         speed: 1,
                         anchorMult:0.6
-         },
+         }, {
           file:'img/zombie/zombie10.png',
                          width:413,
                          height:420,
                          speed: 1,
                          anchorMult:0.6
-          },
+          }, {
            file:'img/zombie/zombie11.png',
                           width:413,
                           height:420,
                           speed: 1,
                           anchorMult:0.6
-           },
+           }, {
             file:'img/zombie/zombie12.png',
                                      width:413,
                                      height:420,
                                      speed: 1,
                                      anchorMult:0.6
-            },
+            }, {
              file:'img/zombie/zombie13.png',
                                       width:413,
                                       height:420,
                                       speed: 1,
                                       anchorMult:0.6
-             },
+             }, {
               file:'img/zombie/zombie14.png',
                                        width:413,
                                        height:420,
