@@ -682,6 +682,32 @@ function showLifeStats() {
     isPaused = false;
 }
 
+
+unction showLifeStats() {
+   isPaused = true;
+   var arma;
+   var munizioni;
+    if (playerData['power'] == 0) {
+        arma = 'Non hai un arma!';
+        munizioni = '';
+    } else {
+       if(playerData['power'] == 25)
+            arma = 'Arma: pistola';
+       else if (playerData['power'] == 50)
+            arma = 'Arma: Fucile';
+       else
+            arma = 'Arma: mitra';
+
+
+
+       if(playerData['munition'] > 0)
+            munizioni = 'Munizioni: ';
+     }
+
+    alert(arma + '\n' + munizioni);
+    isPaused = false;
+}
+
 function updateWeaponImage() {
     var img;
     if (playerData['power'] == 0)
