@@ -650,10 +650,9 @@ function updateWeaponImage() {
         img = 'img/button/Beretta_93R.png';
     else if (playerData['power'] == 50)
         img = 'img/button/ACW_Rifle.png';
-    else if (playerData['power'] == 75)
+    else if (playerData['power'] == 100)
         img = 'img/button/sv_121_by_dalttt-d6mn5w3.png';
-    else
-        img = 'img/button/bomb.png';
+
 
     $('#gun-image').attr('src', img);
 }
