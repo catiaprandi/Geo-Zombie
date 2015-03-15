@@ -312,9 +312,10 @@ function Zombie(pos) {
     
     
     function hit() {
-        if(playerData['power'] > 0) {
+        if(playerData['munition'] > 0) {
+            playerData['munition'] = playerData['munition'] - 1;
 
-        flash();
+            flash();
             lowLag.play('fx/GUN_FIRE-GoodSoundForYou-820112263.mp3');
             health = health - playerData['power'];
             if (isDead()) {
@@ -334,7 +335,7 @@ function Zombie(pos) {
                 }
             }
         } else {
-
+            updateWeaponImage();
             alert("Non hai munizioni!! Non puoi sparare!!\nFai dei report e guadagna punti per comprare munizioni!");
 
         }
@@ -483,6 +484,11 @@ var game = {
 
 
         $('#btnBuyMunition').click(function() {
+            if(playerData['power'] == 0 ) {
+                alert("Non hai un arma! Prima devi comprare un arma!");
+            
+
+            } else
             if (playerData['points'] >= 15) {
                 playerData['points'] -= 15;
                 playerData['munition'] += 4;
@@ -504,20 +510,24 @@ var game = {
             if (playerData['power'] == 0) {
                 playerData['points'] -= powerPrice;
                 playerData['power'] = 25;
+                playerData['munition'] = 4;
                 //powerPrice = 50;
                 updateWeaponImage();
             } else if (playerData['power'] == 25) {
                 playerData['points'] -= powerPrice;
                 playerData['power'] = 50;
+                playerData['munition'] = 4;
                 //powerPrice = 100;
                 updateWeaponImage();
             } else if (playerData['power'] == 50) {
                 playerData['points'] -= powerPrice;
                 playerData['power'] = 75;
+                playerData['munition'] = 4;
                 updateWeaponImage();
             } else if (playerData['power'] == 75) {
               playerData['points'] -= powerPrice;
               playerData['power'] = 100;
+              playerData['munition'] = 4;
               updateWeaponImage();
 
              } else {
@@ -562,7 +572,7 @@ var game = {
         if (--i) myLoop(i); // decrement i and call myLoop again if i > 0
         }, 200);
         } else if (--i) myLoop(i);
-        })(zombies.length); 
+        })(zombies.length);
     },
     
     positionUpdated : function() {
@@ -665,10 +675,16 @@ function updateWeaponImage() {
     var img;
     if (playerData['power'] == 0)
         img = 'img/button/no_weapon.png';
+    else if (playerData['power'] == 25 && playerData['munition'] > 0)
+        img = 'img/button/Beretta_93R_munizioni.png';
     else if (playerData['power'] == 25)
         img = 'img/button/Beretta_93R.png';
+    else if (playerData['power'] == 50 && playerData['munition'] > 0)
+        img = 'img/button/ACW_Rifle_munizioni.png';
     else if (playerData['power'] == 50)
-        img = 'img/button/ACW_Rifle.png';
+                img = 'img/button/ACW_Rifle.png';
+    else if (playerData['power'] == 100 && playerData['munition'] > 0)
+            img = 'img/button/sv_121_by_dalttt-d6mn5w3_munizioni.png';
     else if (playerData['power'] == 100)
         img = 'img/button/sv_121_by_dalttt-d6mn5w3.png';
 
