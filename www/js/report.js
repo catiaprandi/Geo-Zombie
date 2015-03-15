@@ -33,6 +33,7 @@ function report(pos, type) {
         game.savePlayerData();
         alert('Punti bonus: ' + data['bonus_points'] + '\nAttuali: ' + playerData['points']);
     });
+    toggle_visibility('reportform');
 }
 
 $( initialize );

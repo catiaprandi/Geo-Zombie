@@ -485,6 +485,8 @@ var game = {
             } else {
                 alert('Sei già al massimo di vita!');
             }
+
+            toggle_visibility('upgradeform');
         });
 
 
@@ -498,10 +500,12 @@ var game = {
                 playerData['points'] -= 15;
                 playerData['munition'] += 4;
                 //updateHealthImage();
+                updateWeaponImage();
 
             } else {
                 alert('Non hai abbastanza punti!\nDevi fare altri report!');
             }
+            toggle_visibility('upgradeform');
          });
 
 
@@ -538,6 +542,8 @@ var game = {
              } else {
                 alert('Sei già al massimo di potenza!');
             }
+
+            toggle_visibility('upgradeform');
         });
         
         updateWeaponImage();
