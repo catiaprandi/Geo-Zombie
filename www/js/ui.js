@@ -5,4 +5,6 @@ $(document).ready(function() {
  var controlWidth = (viewportHeight/5);
  $('#map-container').css('width', viewportWidth-controlWidth);
  });
+
+ $(window).trigger('resize');
 });
