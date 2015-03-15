@@ -603,7 +603,7 @@ function gameOver(zombPos){
         updateWeaponImage();
         updateHealthImage();
         game.start(playerMarker.getPosition());
-        //window.location.reload();
+        window.location.reload();
     }
 }
 
