@@ -24,7 +24,7 @@ var healthPrice = 25;
 var powerPrice = 25;
 var positionTracked = false;
 var totalZombies = 15;
-var zombiesTargetPosition;
+var zombiesTargetPosition = new google.maps.LatLng();
 var autosaveTimer;
 
 var app = {
@@ -62,15 +62,15 @@ function Zombie(pos) {
     var zombieSprites = [
     {
                 file:'img/zombie/zombie1.png',
-                width:244,
-                height:708,
+                width:350,
+                height:800,
                 speed: 1,
                 anchorMult:0.3
             },
             {
                 file:'img/zombie/zombie2.png',
-                width:437,
-                height:664,
+                width:500,
+                height:700,
                 speed: 1,
                 anchorMult:0.4
             },
@@ -83,8 +83,8 @@ function Zombie(pos) {
             },
         {
             file:'img/zombie/zombie4.png',
-            width:244,
-            height:708,
+            width:350,
+            height:800,
             speed: 1,
             anchorMult:0.3
         },
@@ -296,7 +296,7 @@ function Zombie(pos) {
     
     function checkPosition() {
         dist = google.maps.geometry.spherical.computeDistanceBetween(getPosition(),playerMarker.getPosition());
-	    if(dist<zombieAwareRadius){
+	    if(dist<=zombieAwareRadius){
 		startMove();
 	    }else if(dist>zombieAsleepRadius){
 		stopMove();
@@ -332,7 +332,7 @@ function Zombie(pos) {
             }
         } else {
 
-            alert("Non hai armi!! Non puoi sparare!!");
+            alert("Non hai munizioni!! Non puoi sparare!!\nFai dei report e guadagna punti per comprare munizioni!");
 
         }
 
@@ -357,8 +357,8 @@ function Zombie(pos) {
 }
 
 function checkZombies() {
-    var zom;
-    var dist;
+    /*var zom;
+    var dist;*/
     var i;
     for(i in zombies){
         zombies[i].checkPosition();

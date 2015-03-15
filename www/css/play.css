@@ -8,7 +8,7 @@ html, body {
 #map-container {
     position: fixed;
     height: 100%;
-    width: calc(100% - 20vmin);
+    /*width: calc(100% - 20vmin);*/
 }
 
 #map-canvas {
