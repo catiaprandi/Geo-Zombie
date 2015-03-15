@@ -64,14 +64,14 @@ function Zombie(pos) {
                 file:'img/zombie/zombie1.png',
                 width:350,
                 height:800,
-                speed: 1,
+                speed: 3,
                 anchorMult:0.3
             },
             {
                 file:'img/zombie/zombie2.png',
                 width:500,
                 height:800,
-                speed: 1,
+                speed: 3,
                 anchorMult:0.4
             },
             {
@@ -99,7 +99,7 @@ function Zombie(pos) {
             file:'img/zombie/zombie6.png',
             width:450,
             height:800,
-            speed: 1,
+            speed: 2,
             anchorMult:0.6
         }, {
         file:'img/zombie/zombie7.png',
@@ -117,7 +117,7 @@ function Zombie(pos) {
          file:'img/zombie/zombie9.png',
                         width:450,
                         height:650,
-                        speed: 1,
+                        speed: 2,
                         anchorMult:0.6
          }, {
           file:'img/zombie/zombie10.png',
@@ -129,25 +129,25 @@ function Zombie(pos) {
            file:'img/zombie/zombie11.png',
                           width:413,
                           height:600,
-                          speed: 1,
+                          speed: 3,
                           anchorMult:0.6
            }, {
             file:'img/zombie/zombie12.png',
                                      width:450,
                                      height:750,
-                                     speed: 1,
+                                     speed: 2,
                                      anchorMult:0.6
             }, {
              file:'img/zombie/zombie13.png',
                                       width:450,
                                       height:800,
-                                      speed: 1,
+                                      speed: 2,
                                       anchorMult:0.6
              }, {
               file:'img/zombie/zombie14.png',
                                        width:500,
                                        height:700,
-                                       speed: 1,
+                                       speed: 2,
                                        anchorMult:0.6
               }
 
