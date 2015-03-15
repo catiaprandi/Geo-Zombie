@@ -378,12 +378,13 @@ function mainLoop() {
 function toggle_visibility(id) {
    var e = document.getElementById(id);
    //isPaused = !isPaused;
-   if(e.style.display == 'block')
+   if(e.style.display == 'block') {
       e.style.display = 'none';
       isPaused = false;
-   else
+  } else {
       e.style.display = 'block';
       isPaused = true;
+     }
 }
 
 var game = {
