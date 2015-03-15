@@ -9,7 +9,7 @@ var timeInt;
 var FPS = 3;
 var fpsInt = 1000/FPS;
 var zombieMoveDist = 0.00001;
-var zombieDistributionRange = 1000;
+var zombieDistributionRange = 600;
 var zombieAwareRadius = 500;
 var zombieAsleepRadius = 700;
 var zombieVisibleRadius = 150;
@@ -23,7 +23,7 @@ var isPaused = false;
 var healthPrice = 25;
 var powerPrice = 25;
 var positionTracked = false;
-var totalZombies = 15;
+var totalZombies = 20;
 var zombiesTargetPosition = new google.maps.LatLng();
 var autosaveTimer;
 
@@ -60,7 +60,7 @@ function Zombie(pos) {
     var anchorMult = 0.4;
 
     var zombieSprites = [
-    {
+            {
                 file:'img/zombie/zombie1.png',
                 width:350,
                 height:800,
@@ -158,6 +158,9 @@ function Zombie(pos) {
     ];
     
     var curSprite = zombieSprites[Math.round(Math.random()*(zombieSprites.length-1))];
+
+
+    alert(curSprite);
 
     var image = new google.maps.MarkerImage(curSprite.file,
             new google.maps.Size(curSprite.width,curSprite.height),
