@@ -378,7 +378,7 @@ var game = {
     
         $('#show-player-stats').click(function() {showPlayerStats();});
 
-        $('#show-health-stats').click(function() { alert("Prova"); showLifeStats();});
+        $('#show-health-stats').click(function() { showLifeStats();});
 
         $('#btnUpgradeForm').click(function() {
             toggle_visibility('upgradeform');
@@ -396,6 +396,7 @@ var game = {
             }
         });
         $('#btnBuyPower').click(function() {
+            powerPrice = playerData['power'] + 25;
             if (playerData['points'] < powerPrice) {
                 alert('Non hai abbastanza punti!\nContinua a fare report!');
                 return;
@@ -404,18 +405,23 @@ var game = {
             if (playerData['power'] == 0) {
                 playerData['points'] -= powerPrice;
                 playerData['power'] = 25;
-                powerPrice = 50;
+                //powerPrice = 50;
                 updateWeaponImage();
             } else if (playerData['power'] == 25) {
                 playerData['points'] -= powerPrice;
                 playerData['power'] = 50;
-                powerPrice = 100;
+                //powerPrice = 100;
                 updateWeaponImage();
             } else if (playerData['power'] == 50) {
                 playerData['points'] -= powerPrice;
-                playerData['power'] = 100;
+                playerData['power'] = 75;
                 updateWeaponImage();
-            } else {
+            } else if (playerData['power'] == 75) {
+              playerData['points'] -= powerPrice;
+              playerData['power'] = 100;
+              updateWeaponImage();
+
+             } else {
                 alert('Sei già al massimo di potenza!');
             }
         });
@@ -541,6 +547,7 @@ function showPlayerStats() {
 
 
 function showLifeStats() {
+   isPaused = true;
    var stringa;
    if(playerData['health'] != 100)
         stringa = '\nSe fai altri report puoi comprarne altra!';
@@ -558,8 +565,11 @@ function updateWeaponImage() {
         img = 'img/button/Beretta_93R.png';
     else if (playerData['power'] == 50)
         img = 'img/button/ACW_Rifle.png';
-    else if (playerData['power'] == 100)
+    else if (playerData['power'] == 75)
         img = 'img/button/sv_121_by_dalttt-d6mn5w3.png';
+    else
+        img = 'img/button/bomb.png';
+
     $('#gun-image').attr('src', img);
 }
 
