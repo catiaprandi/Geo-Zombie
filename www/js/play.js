@@ -70,83 +70,83 @@ function Zombie(pos) {
             {
                 file:'img/zombie/zombie2.png',
                 width:500,
-                height:700,
+                height:800,
                 speed: 1,
                 anchorMult:0.4
             },
             {
                 file:'img/zombie/zombie3.png',
-                width:413,
-                height:420,
+                width: 500,
+                height:500,
                 speed: 1,
                 anchorMult:0.6
             },
         {
             file:'img/zombie/zombie4.png',
-            width:350,
-            height:800,
+            width:500,
+            height:750,
             speed: 1,
             anchorMult:0.3
         },
         {
             file:'img/zombie/zombie5.png',
-            width:437,
-            height:664,
+            width:470,
+            height:750,
             speed: 1,
             anchorMult:0.4
         },
         {
             file:'img/zombie/zombie6.png',
-            width:413,
-            height:420,
+            width:450,
+            height:800,
             speed: 1,
             anchorMult:0.6
         }, {
         file:'img/zombie/zombie7.png',
-                width:413,
-                height:420,
+                width:450,
+                height:800,
                 speed: 1,
                 anchorMult:0.6
          }, {
           file:'img/zombie/zombie8.png',
-                         width:413,
-                         height:420,
+                         width:500,
+                         height:510,
                          speed: 1,
                          anchorMult:0.6
         }, {
          file:'img/zombie/zombie9.png',
-                        width:413,
-                        height:420,
+                        width:450,
+                        height:650,
                         speed: 1,
                         anchorMult:0.6
          }, {
           file:'img/zombie/zombie10.png',
-                         width:413,
-                         height:420,
+                         width:500,
+                         height:800,
                          speed: 1,
                          anchorMult:0.6
           }, {
            file:'img/zombie/zombie11.png',
                           width:413,
-                          height:420,
+                          height:600,
                           speed: 1,
                           anchorMult:0.6
            }, {
             file:'img/zombie/zombie12.png',
-                                     width:413,
-                                     height:420,
+                                     width:450,
+                                     height:750,
                                      speed: 1,
                                      anchorMult:0.6
             }, {
              file:'img/zombie/zombie13.png',
-                                      width:413,
-                                      height:420,
+                                      width:450,
+                                      height:800,
                                       speed: 1,
                                       anchorMult:0.6
              }, {
               file:'img/zombie/zombie14.png',
-                                       width:413,
-                                       height:420,
+                                       width:500,
+                                       height:700,
                                        speed: 1,
                                        anchorMult:0.6
               }
