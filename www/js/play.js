@@ -333,6 +333,8 @@ function Zombie(pos) {
                     game.toggleView();
                     panorama.setVisible(false);
                 }
+            } else {
+                game.savePlayerData();
             }
         } else {
             updateWeaponImage();
@@ -375,11 +377,13 @@ function mainLoop() {
 
 function toggle_visibility(id) {
    var e = document.getElementById(id);
-   isPaused = !isPaused;
+   //isPaused = !isPaused;
    if(e.style.display == 'block')
       e.style.display = 'none';
+      isPaused = false;
    else
       e.style.display = 'block';
+      isPaused = true;
 }
 
 var game = {
@@ -486,7 +490,7 @@ var game = {
         $('#btnBuyMunition').click(function() {
             if(playerData['power'] == 0 ) {
                 alert("Non hai un arma! Prima devi comprare un arma!");
-            
+
 
             } else
             if (playerData['points'] >= 15) {
@@ -664,9 +668,9 @@ function showLifeStats() {
    isPaused = true;
    var stringa;
    if(playerData['health'] != 100)
-        stringa = '\nSe fai altri report puoi comprarne altra!';
+        stringa = '%\nSe fai altri report puoi comprarne altra!';
    else
-        stringa = '';
+        stringa = '%!';
     alert('La tua vita è di: ' + playerData['health'] + stringa);
     isPaused = false;
 }
