@@ -160,7 +160,7 @@ function Zombie(pos) {
     var curSprite = zombieSprites[Math.round(Math.random()*(zombieSprites.length-1))];
 
 
-    alert("numero " + Math.round(Math.random()*(zombieSprites.length-1)));
+    //alert("numero " + Math.round(Math.random()*(zombieSprites.length-1)));
 
     var image = new google.maps.MarkerImage(curSprite.file,
             new google.maps.Size(curSprite.width,curSprite.height),
