@@ -60,6 +60,27 @@ function Zombie(pos) {
     var anchorMult = 0.4;
 
     var zombieSprites = [
+    {
+                file:'img/zombie/zombie1.png',
+                width:244,
+                height:708,
+                speed: 1,
+                anchorMult:0.3
+            },
+            {
+                file:'img/zombie/zombie2.png',
+                width:437,
+                height:664,
+                speed: 1,
+                anchorMult:0.4
+            },
+            {
+                file:'img/zombie/zombie3.png',
+                width:413,
+                height:420,
+                speed: 1,
+                anchorMult:0.6
+            },
         {
             file:'img/zombie/zombie4.png',
             width:244,
@@ -80,7 +101,60 @@ function Zombie(pos) {
             height:420,
             speed: 1,
             anchorMult:0.6
-        }
+        },
+        file:'img/zombie/zombie7.png',
+                width:413,
+                height:420,
+                speed: 1,
+                anchorMult:0.6
+         },
+          file:'img/zombie/zombie8.png',
+                         width:413,
+                         height:420,
+                         speed: 1,
+                         anchorMult:0.6
+        },
+         file:'img/zombie/zombie9.png',
+                        width:413,
+                        height:420,
+                        speed: 1,
+                        anchorMult:0.6
+         },
+          file:'img/zombie/zombie10.png',
+                         width:413,
+                         height:420,
+                         speed: 1,
+                         anchorMult:0.6
+          },
+           file:'img/zombie/zombie11.png',
+                          width:413,
+                          height:420,
+                          speed: 1,
+                          anchorMult:0.6
+           },
+            file:'img/zombie/zombie12.png',
+                                     width:413,
+                                     height:420,
+                                     speed: 1,
+                                     anchorMult:0.6
+            },
+             file:'img/zombie/zombie13.png',
+                                      width:413,
+                                      height:420,
+                                      speed: 1,
+                                      anchorMult:0.6
+             },
+              file:'img/zombie/zombie14.png',
+                                       width:413,
+                                       height:420,
+                                       speed: 1,
+                                       anchorMult:0.6
+              }
+
+
+
+
+
     ];
     
     var curSprite = zombieSprites[Math.round(Math.random()*(zombieSprites.length-1))];
