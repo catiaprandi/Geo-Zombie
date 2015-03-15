@@ -471,6 +471,9 @@ var game = {
 
         $('#show-health-stats').click(function() { showLifeStats();});
 
+
+        $('#show-gun-stats').click(function() { showGunStats();});
+
         $('#btnUpgradeForm').click(function() {
             toggle_visibility('upgradeform');
         });
@@ -683,7 +686,7 @@ function showLifeStats() {
 }
 
 
-unction showLifeStats() {
+function showGunStats() {
    isPaused = true;
    var arma;
    var munizioni;
