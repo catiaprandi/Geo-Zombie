@@ -212,7 +212,7 @@ function Zombie(pos) {
             playerData['health'] = playerData['health'] - 25;
             updateHealthImage();
             if (playerData['health'] <= 0) {
-              
+
                 stopMove();
                 gameOver(getPosition());
             } else {
@@ -737,7 +737,9 @@ function updateWeaponImage() {
 }
 
 function updateHealthImage() {
-    alert("aggiorno vita");
+    if(playerData['health'] != 100) {
+        alert("aggiorno vita");
+      }
     var img;
     if (playerData['health'] == 0)
         img = 'img/button/heart_0.png';
