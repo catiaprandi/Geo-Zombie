@@ -49,7 +49,7 @@ var app = {
 };
 
 function Zombie(pos) {
-    
+
     var health; // Zombie's health
 
     var route;
@@ -156,7 +156,7 @@ function Zombie(pos) {
 
 
     ];
-    
+
     var curSprite = zombieSprites[Math.round(Math.random()*(zombieSprites.length-1))];
 
 
@@ -180,16 +180,17 @@ function Zombie(pos) {
         clickable: true
     });
     var health = 100;
-    
+
     function setVisible(flag) {
         mapMarker.setVisible(flag);
         panoramaMarker.setVisible(flag && game.isPanoramaView() ? flag : !flag);
     }
-    
+
     function isDead() {
+
         return ((health <= 0) ? true : false);
     }
-    
+
     function spawn() {
         health = 100;
         var center = playerMarker.getPosition();
@@ -200,7 +201,7 @@ function Zombie(pos) {
         panoramaMarker.setPosition(pos);
         setVisible(true);
     }
-    
+
     function setPosition(pos) {
         mapMarker.setPosition(pos);
         panoramaMarker.setPosition(pos);
@@ -210,6 +211,7 @@ function Zombie(pos) {
             playerData['health'] = playerData['health'] - 25;
             updateHealthImage();
             if (playerData['health'] <= 0) {
+                alert("sono morto dentro serPosition");
                 stopMove();
                 gameOver(getPosition());
             } else {
@@ -230,7 +232,7 @@ function Zombie(pos) {
             panoramaMarker.setVisible(true);
         }
     }
-    
+
     function getPosition() {
         return mapMarker.getPosition();
     }
@@ -249,11 +251,11 @@ function Zombie(pos) {
             }
         });
     }
-    
+
     function redirect() {
         getDirections();
     }
-    
+
     function nextMove() {
         var newZombPos;
         if (route.length>0 && !isPaused) {
@@ -277,26 +279,26 @@ function Zombie(pos) {
                 }
                setPosition(newZombPos);
             }
-            
+
         }
         moveTimer = setTimeout(nextMove, 1000/FPS);
     }
-    
+
     function startMove() {
         if(route && !moveTimer){
             //moveInt = setInterval(move,1000/FPS);
             moveTimer = setTimeout(nextMove, 1000/FPS);
         }
-       
+
     }
-    
+
     function stopMove(){
         if(moveTimer){
             clearTimeout(moveTimer);
             moveTimer = null;
         }
     }
-    
+
     function checkPosition() {
         dist = google.maps.geometry.spherical.computeDistanceBetween(getPosition(),playerMarker.getPosition());
 	    if(dist<=zombieAwareRadius){
@@ -305,12 +307,12 @@ function Zombie(pos) {
 		stopMove();
 	    }
     }
-    
+
     function isInPlayerVisibleRadius() {
         return (google.maps.geometry.spherical.computeDistanceBetween(mapMarker.getPosition(), playerMarker.getPosition()) <= zombieVisibleRadius);
     }
-    
-    
+
+
     function hit() {
         if(playerData['munition'] > 0) {
             playerData['munition'] = playerData['munition'] - 1;
@@ -319,6 +321,7 @@ function Zombie(pos) {
             lowLag.play('fx/GUN_FIRE-GoodSoundForYou-820112263.mp3');
             health = health - playerData['power'];
             if (isDead()) {
+                alert("morto");
                 spawn();
 
                 zombiesInVisibleRadius = zombies.some(function(element, index, array) {
@@ -343,12 +346,12 @@ function Zombie(pos) {
         }
 
     }
-    
+
     // Run once
     google.maps.event.addListener(panoramaMarker, 'click', function() {
         hit();
     });
-    
+
     return {
         getPosition:getPosition,
         startMove:startMove,
@@ -370,7 +373,7 @@ function checkZombies() {
         zombies[i].checkPosition();
     }
 }
-    
+
 function mainLoop() {
     checkZombies();
 }
@@ -389,18 +392,18 @@ function toggle_visibility(id) {
 
 var game = {
     init : function() {
-    
+
         playerData = JSON.parse(localStorage['data']);
-        
+
         // Initialize Google Maps and Street View
         dirService = new google.maps.DirectionsService();
-        
+
         var panoramaOptions = {
             //visible: false,
             disableDoubleClickZoom:true,
             disableDefaultUI: true,
         };
-        
+
         panorama = new google.maps.StreetViewPanorama(document.getElementById('panorama-canvas'), panoramaOptions);
 
         var mapOptions = {
@@ -411,39 +414,39 @@ var game = {
             disableDoubleClickZoom: true,
             streetView : panorama,
         };
-        
+
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-        
+
         var playerIcon = new google.maps.MarkerImage(
             playerData['sex'] == 'f' ? 'img/marker/player_female.png' : 'img/marker/player.png',
             null, /* size is determined at runtime */
             null, /* origin is 0,0 */
             null, /* anchor is bottom center of the scaled image */
             new google.maps.Size(62, 68)
-        ); 
-        
+        );
+
         playerMarker = new google.maps.Marker({
             map: map,
             icon: playerIcon,
         });
-        
+
         playerMarker.circle = new google.maps.Circle({
             map: map,
             center: playerMarker.getPosition(),
             radius: zombieVisibleRadius,
         });
-        
+
         playerMarker.circle.bindTo('center', playerMarker, 'position');
 
         // Try HTML5 geolocation
         if(navigator.geolocation) {
             gpsTracker = navigator.geolocation.watchPosition(function(position) {
                 var pos = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-                
+
                 playerMarker.setPosition(pos);
                 panorama.setPosition(pos);
                 map.setCenter(pos);
-            
+
                 if (!positionTracked) {
                     positionTracked = true;
                     game.start();
@@ -457,16 +460,16 @@ var game = {
                 else
                     alert("Nessuna posizione rilevata.\n" + "[" + error.code + "] " + error.message);
             }, {
-                enableHighAccuracy: true, 
-                maximumAge        : 30000, 
+                enableHighAccuracy: true,
+                maximumAge        : 30000,
                 timeout           : 27000
             });
         } else {
             // Browser doesn't support Geolocation
             alert('Il tuo browser non supporta la geolocalizzazione!');
         }
-        
-    
+
+
         $('#show-player-stats').click(function() {showPlayerStats();});
 
         $('#show-health-stats').click(function() { showLifeStats();});
@@ -477,7 +480,7 @@ var game = {
         $('#btnUpgradeForm').click(function() {
             toggle_visibility('upgradeform');
         });
-        
+
         $('#btnBuyHealth').click(function() {
             if (playerData['health'] < 100 && playerData['points'] >= healthPrice ) {
                 playerData['points'] -= healthPrice;
@@ -518,7 +521,7 @@ var game = {
                 alert('Non hai abbastanza punti!\nContinua a fare report!');
                 return;
             }
-            
+
             if (playerData['power'] == 0) {
                 playerData['points'] -= powerPrice;
                 playerData['power'] = 25;
@@ -548,21 +551,21 @@ var game = {
 
             toggle_visibility('upgradeform');
         });
-        
+
         updateWeaponImage();
         updateHealthImage();
         $('#status-image').attr('src', playerData['sex'] == 'f' ? 'img/marker/player_female.png' : 'img/marker/player.png');
-        
+
         //setInterval(mainLoop, 1000/FPS);
         lowLag.init();
         lowLag.load("fx/GUN_FIRE-GoodSoundForYou-820112263.mp3");
     },
-    
+
     start : function() {
         game.createZombies();
         game.savePlayerDataAuto();
     },
-    
+
     createZombies : function() {
         var newZombie;
         var i;
@@ -577,7 +580,7 @@ var game = {
             zombies.push(newZombie);
         }
     },
-    
+
     recalculateZombiesDirections : function() {
         (function myLoop (i) {
         if (google.maps.geometry.spherical.computeDistanceBetween(zombies[i-1].getPosition(),playerMarker.getPosition())<=zombieAwareRadius) {
@@ -588,14 +591,14 @@ var game = {
         } else if (--i) myLoop(i);
         })(zombies.length);
     },
-    
+
     positionUpdated : function() {
         if (google.maps.geometry.spherical.computeDistanceBetween(zombiesTargetPosition, playerMarker.getPosition()) > 10) {
             zombiesTargetPosition = playerMarker.getPosition();
             game.recalculateZombiesDirections();
         }
     },
-    
+
     toggleView : function() {
         var currCenter = map.getCenter();
         if ($("#map-canvas").hasClass('bigmap')) {
@@ -608,7 +611,7 @@ var game = {
         google.maps.event.trigger(map, 'resize');
         map.setCenter(currCenter);
     },
-    
+
     savePlayerDataAuto : function() {
         $.ajax({
             url: 'http://137.204.74.226/Geo-Zombie/index.php',
@@ -618,7 +621,7 @@ var game = {
             autosaveTimer = setTimeout(game.savePlayerDataAuto, 15000);
         });
     },
-    
+
     resetPlayerData : function() {
         playerData['points'] = 0;
         playerData['power'] = 0;
@@ -633,7 +636,7 @@ var game = {
             data: playerData
         });
     },
-    
+
     isPanoramaView : function () {
         return !$("#map-canvas").hasClass('bigmap');
     }
@@ -651,7 +654,7 @@ function gameOver(zombPos){
     document.getElementById('blood').style.display='block';
     game.resetPlayerData();
     game.savePlayerData();
-    
+
     if (confirm('Sei morto! Vuoi ricominciare?')) {
         document.getElementById('blood').style.display='none';
         updateWeaponImage();
@@ -733,6 +736,7 @@ function updateWeaponImage() {
 }
 
 function updateHealthImage() {
+    alert("aggiorno vita");
     var img;
     if (playerData['health'] == 0)
         img = 'img/button/heart_0.png';
