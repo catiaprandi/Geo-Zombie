@@ -208,6 +208,7 @@ function Zombie(pos) {
         var dist = google.maps.geometry.spherical.computeDistanceBetween(getPosition(),playerMarker.getPosition());
 
         if (dist<dieRadius) {
+            alert("vicinio.. troppo vicino!!!");
             playerData['health'] = playerData['health'] - 25;
             updateHealthImage();
             if (playerData['health'] <= 0) {
