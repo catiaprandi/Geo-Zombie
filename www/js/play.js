@@ -715,7 +715,7 @@ function showGunStats() {
        if(playerData['munition'] > 0)
             munizioni = 'Munizioni: ' +playerData['munition'] ;
         else {
-            municazioni = 'Munizioni: 0' ;
+            munizioni = 'Munizioni: 0' ;
         }
      }
 
