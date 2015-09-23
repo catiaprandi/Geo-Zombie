@@ -14,7 +14,7 @@ var zombieAwareRadius = 500;
 var zombieAsleepRadius = 700;
 var zombieVisibleRadius = 150;
 var zombiesInVisibleRadius = false;
-var dieRadius = 13;
+var dieRadius = 15;
 var aniFinish;
 var aniAmt = 10;
 var povAniInt;
@@ -206,15 +206,13 @@ function Zombie(pos) {
         mapMarker.setPosition(pos);
         panoramaMarker.setPosition(pos);
         var dist = google.maps.geometry.spherical.computeDistanceBetween(getPosition(),playerMarker.getPosition());
-        if(dist < 15) {
-          alert(dist + " " + dieRadius);
-        }
+
         if (dist<dieRadius) {
-            alert("vicinio.. troppo vicino!!!");
+            alert("decremento la vita");
             playerData['health'] = playerData['health'] - 25;
             updateHealthImage();
             if (playerData['health'] <= 0) {
-                alert("sono morto dentro serPosition");
+              
                 stopMove();
                 gameOver(getPosition());
             } else {
