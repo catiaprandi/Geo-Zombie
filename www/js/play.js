@@ -698,7 +698,7 @@ function showLifeStats() {
 function showGunStats() {
    isPaused = true;
    var arma;
-   var munizioni;
+   var munizioni = '';
     if (playerData['power'] == 0) {
         arma = 'Non hai un arma!';
         munizioni = '';
@@ -714,6 +714,9 @@ function showGunStats() {
 
        if(playerData['munition'] > 0)
             munizioni = 'Munizioni: ' +playerData['munition'] ;
+        else {
+
+        }
      }
 
     alert(arma + '\n' + munizioni);
@@ -742,7 +745,7 @@ function updateWeaponImage() {
 }
 
 function updateHealthImage() {
-    
+
     var img;
     if (playerData['health'] == 0)
         img = 'img/button/heart_0.png';
