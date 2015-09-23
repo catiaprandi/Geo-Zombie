@@ -208,8 +208,13 @@ function Zombie(pos) {
         var dist = google.maps.geometry.spherical.computeDistanceBetween(getPosition(),playerMarker.getPosition());
 
         if (dist<dieRadius) {
-            alert("decremento la vita");
+
             playerData['health'] = playerData['health'] - 25;
+            document.getElementById('blood').style.display='block';
+            setTimeout(function() { document.getElementById('blood').style.display='none'; }, 250);
+
+
+
             updateHealthImage();
             if (playerData['health'] <= 0) {
 
@@ -322,7 +327,7 @@ function Zombie(pos) {
             lowLag.play('fx/GUN_FIRE-GoodSoundForYou-820112263.mp3');
             health = health - playerData['power'];
             if (isDead()) {
-                alert("morto");
+
                 spawn();
 
                 zombiesInVisibleRadius = zombies.some(function(element, index, array) {
@@ -589,7 +594,7 @@ var game = {
         zombies[i-1].redirect(); // your code here
         if (--i) myLoop(i); // decrement i and call myLoop again if i > 0
         }, 200);
-        } else if (--i) myLoop(i);
+      } else if (--i) myLoop(i);
         })(zombies.length);
     },
 
